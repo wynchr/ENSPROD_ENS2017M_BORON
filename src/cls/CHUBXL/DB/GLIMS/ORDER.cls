@@ -1,0 +1,409 @@
+Class CHUBXL.DB.GLIMS.ORDER Extends %Library.Persistent [ ClassType = persistent, Not ProcedureBlock, SqlRowIdPrivate, SqlTableName = ORDER ]
+{
+
+Parameter CONNECTION = "GLIMS,NOCREATE";
+
+Parameter EXTDBNAME = "Oracle";
+
+Parameter EXTERNALTABLENAME = "ORAGLIMS.ORDER_";
+
+Property ORDADDTOBUDGET As %Float(EXTERNALSQLNAME = "ORD_ADDTOBUDGET", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 64, SqlFieldName = ORD_ADDTOBUDGET ];
+
+Property ORDAGENT As %Float(EXTERNALSQLNAME = "ORD_AGENT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 6, SqlFieldName = ORD_AGENT ];
+
+Property ORDARCHIVETIME As %Numeric(EXTERNALSQLNAME = "ORD_ARCHIVETIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 53, SqlFieldName = ORD_ARCHIVETIME ];
+
+Property ORDARCHIVEUSER As %Float(EXTERNALSQLNAME = "ORD_ARCHIVEUSER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 52, SqlFieldName = ORD_ARCHIVEUSER ];
+
+Property ORDBILLINGMARK As %String(EXTERNALSQLNAME = "ORD_BILLINGMARK", EXTERNALSQLTYPE = 12, MAXLEN = 240) [ SqlColumnNumber = 63, SqlFieldName = ORD_BILLINGMARK ];
+
+Property ORDCLOSURETIME As %Numeric(EXTERNALSQLNAME = "ORD_CLOSURETIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 28, SqlFieldName = ORD_CLOSURETIME ];
+
+Property ORDCLOSUREUSER As %Float(EXTERNALSQLNAME = "ORD_CLOSUREUSER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 27, SqlFieldName = ORD_CLOSUREUSER ];
+
+Property ORDCOMPLETIONTIME As %Numeric(EXTERNALSQLNAME = "ORD_COMPLETIONTIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 26, SqlFieldName = ORD_COMPLETIONTIME ];
+
+Property ORDCONTEXT As %Float(EXTERNALSQLNAME = "ORD_CONTEXT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 59, SqlFieldName = ORD_CONTEXT ];
+
+Property ORDCONTEXTDATE As %TimeStamp(EXTERNALSQLNAME = "ORD_CONTEXTDATE", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 57, SqlFieldName = ORD_CONTEXTDATE ];
+
+Property ORDCONTEXTINFO As %String(EXTERNALSQLNAME = "ORD_CONTEXTINFO", EXTERNALSQLTYPE = 12, MAXLEN = 240) [ SqlColumnNumber = 58, SqlFieldName = ORD_CONTEXTINFO ];
+
+Property ORDCREATIONTIME As %Numeric(EXTERNALSQLNAME = "ORD_CREATIONTIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 42, SqlFieldName = ORD_CREATIONTIME ];
+
+Property ORDCREATIONUSER As %Float(EXTERNALSQLNAME = "ORD_CREATIONUSER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 41, SqlFieldName = ORD_CREATIONUSER ];
+
+Property ORDDEPARTMENT As %Float(EXTERNALSQLNAME = "ORD_DEPARTMENT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 25, SqlFieldName = ORD_DEPARTMENT ];
+
+Property ORDDESCRIPTION As %String(EXTERNALSQLNAME = "ORD_DESCRIPTION", EXTERNALSQLTYPE = 12, MAXLEN = 1024) [ SqlColumnNumber = 14, SqlFieldName = ORD_DESCRIPTION ];
+
+Property ORDDIAGNOSIS As %String(EXTERNALSQLNAME = "ORD_DIAGNOSIS", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 54, SqlFieldName = ORD_DIAGNOSIS ];
+
+Property ORDDISCONTINUATIONREASON As %String(EXTERNALSQLNAME = "ORD_DISCONTINUATIONREASON", EXTERNALSQLTYPE = 12, MAXLEN = 256) [ SqlColumnNumber = 31, SqlFieldName = ORD_DISCONTINUATIONREASON ];
+
+Property ORDDISCONTINUATIONTIME As %Numeric(EXTERNALSQLNAME = "ORD_DISCONTINUATIONTIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 30, SqlFieldName = ORD_DISCONTINUATIONTIME ];
+
+Property ORDDISCONTINUATIONUSER As %Float(EXTERNALSQLNAME = "ORD_DISCONTINUATIONUSER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 29, SqlFieldName = ORD_DISCONTINUATIONUSER ];
+
+Property ORDDISTANCE As %Float(EXTERNALSQLNAME = "ORD_DISTANCE", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 48, SqlFieldName = ORD_DISTANCE ];
+
+Property ORDDUETIME As %Numeric(EXTERNALSQLNAME = "ORD_DUETIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 19, SqlFieldName = ORD_DUETIME ];
+
+Property ORDENCOUNTER As %Float(EXTERNALSQLNAME = "ORD_ENCOUNTER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 13, SqlFieldName = ORD_ENCOUNTER ];
+
+Property ORDEXONERATIONCODE As %String(EXTERNALSQLNAME = "ORD_EXONERATIONCODE", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 71, SqlFieldName = ORD_EXONERATIONCODE ];
+
+Property ORDEXPERTSYSTEMFLAGS As %String(EXTERNALSQLNAME = "ORD_EXPERTSYSTEMFLAGS", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ SqlColumnNumber = 61, SqlFieldName = ORD_EXPERTSYSTEMFLAGS ];
+
+Property ORDEXTERNALID As %String(EXTERNALSQLNAME = "ORD_EXTERNALID", EXTERNALSQLTYPE = 12, MAXLEN = 40) [ SqlColumnNumber = 8, SqlFieldName = ORD_EXTERNALID ];
+
+Property ORDFAX As %String(EXTERNALSQLNAME = "ORD_FAX", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 37, SqlFieldName = ORD_FAX ];
+
+Property ORDFIELDPROTECTION As %String(EXTERNALSQLNAME = "ORD_FIELDPROTECTION", EXTERNALSQLTYPE = 12, MAXLEN = 64) [ SqlColumnNumber = 39, SqlFieldName = ORD_FIELDPROTECTION ];
+
+Property ORDFROZEN As %Float(EXTERNALSQLNAME = "ORD_FROZEN", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 78, SqlFieldName = ORD_FROZEN ];
+
+Property ORDFSEISINCOMPLETE As %Float(EXTERNALSQLNAME = "ORD_FSEISINCOMPLETE", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 74, SqlFieldName = ORD_FSEISINCOMPLETE ];
+
+Property ORDFSEPREAGREEMENTCODE As %String(EXTERNALSQLNAME = "ORD_FSEPREAGREEMENTCODE", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 76, SqlFieldName = ORD_FSEPREAGREEMENTCODE ];
+
+Property ORDFSEPREAGREEMENTDATE As %TimeStamp(EXTERNALSQLNAME = "ORD_FSEPREAGREEMENTDATE", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 77, SqlFieldName = ORD_FSEPREAGREEMENTDATE ];
+
+Property ORDFSEPRESCRIPTIONORIGIN As %Float(EXTERNALSQLNAME = "ORD_FSEPRESCRIPTIONORIGIN", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 73, SqlFieldName = ORD_FSEPRESCRIPTIONORIGIN ];
+
+Property ORDHASFIXEDSPECIMENS As %Float(EXTERNALSQLNAME = "ORD_HASFIXEDSPECIMENS", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 51, SqlFieldName = ORD_HASFIXEDSPECIMENS ];
+
+Property ORDID As %Float(EXTERNALSQLNAME = "ORD_ID", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 2, SqlFieldName = ORD_ID ];
+
+Property ORDIMAGE As %String(EXTERNALSQLNAME = "ORD_IMAGE", EXTERNALSQLTYPE = 12, MAXLEN = 240) [ SqlColumnNumber = 38, SqlFieldName = ORD_IMAGE ];
+
+Property ORDINCOMPLETENESSREASON As %String(EXTERNALSQLNAME = "ORD_INCOMPLETENESSREASON", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 75, SqlFieldName = ORD_INCOMPLETENESSREASON ];
+
+Property ORDINTERNALID As %String(EXTERNALSQLNAME = "ORD_INTERNALID", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ Required, SqlColumnNumber = 4, SqlFieldName = ORD_INTERNALID ];
+
+Property ORDISSUER As %Float(EXTERNALSQLNAME = "ORD_ISSUER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 5, SqlFieldName = ORD_ISSUER ];
+
+Property ORDISSUERINFO As %String(EXTERNALSQLNAME = "ORD_ISSUERINFO", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ SqlColumnNumber = 49, SqlFieldName = ORD_ISSUERINFO ];
+
+Property ORDLASTUPDATETIME As %Numeric(EXTERNALSQLNAME = "ORD_LASTUPDATETIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 44, SqlFieldName = ORD_LASTUPDATETIME ];
+
+Property ORDLASTUPDATEUSER As %Float(EXTERNALSQLNAME = "ORD_LASTUPDATEUSER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 43, SqlFieldName = ORD_LASTUPDATEUSER ];
+
+Property ORDLOG As %String(EXTERNALSQLNAME = "ORD_LOG", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 60, SqlFieldName = ORD_LOG ];
+
+Property ORDLOWESTOBJECTTIME As %Numeric(EXTERNALSQLNAME = "ORD_LOWESTOBJECTTIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 10, SqlFieldName = ORD_LOWESTOBJECTTIME ];
+
+Property ORDMANUALVALIDATION As %Float(EXTERNALSQLNAME = "ORD_MANUALVALIDATION", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 20, SqlFieldName = ORD_MANUALVALIDATION ];
+
+Property ORDOBJECT As %Float(EXTERNALSQLNAME = "ORD_OBJECT", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 9, SqlFieldName = ORD_OBJECT ];
+
+Property ORDORDERSET As %Float(EXTERNALSQLNAME = "ORD_ORDERSET", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 33, SqlFieldName = ORD_ORDERSET ];
+
+Property ORDPHONE As %String(EXTERNALSQLNAME = "ORD_PHONE", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 36, SqlFieldName = ORD_PHONE ];
+
+Property ORDPHONELOG As %String(EXTERNALSQLNAME = "ORD_PHONELOG", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 22, SqlFieldName = ORD_PHONELOG ];
+
+Property ORDPHONERESULTS As %Float(EXTERNALSQLNAME = "ORD_PHONERESULTS", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 62, SqlFieldName = ORD_PHONERESULTS ];
+
+Property ORDPHONESTATUS As %Float(EXTERNALSQLNAME = "ORD_PHONESTATUS", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 21, SqlFieldName = ORD_PHONESTATUS ];
+
+Property ORDPRESCRIPTIONTIME As %Numeric(EXTERNALSQLNAME = "ORD_PRESCRIPTIONTIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 17, SqlFieldName = ORD_PRESCRIPTIONTIME ];
+
+Property ORDQUESTION As %String(EXTERNALSQLNAME = "ORD_QUESTION", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 35, SqlFieldName = ORD_QUESTION ];
+
+Property ORDRECEIPTTIME As %Numeric(EXTERNALSQLNAME = "ORD_RECEIPTTIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ Required, SqlColumnNumber = 16, SqlFieldName = ORD_RECEIPTTIME ];
+
+Property ORDREFERRAL As %Float(EXTERNALSQLNAME = "ORD_REFERRAL", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 40, SqlFieldName = ORD_REFERRAL ];
+
+Property ORDREPORTCOPYRECEIVER As %Float(EXTERNALSQLNAME = "ORD_REPORTCOPYRECEIVER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 50, SqlFieldName = ORD_REPORTCOPYRECEIVER ];
+
+Property ORDREPORTINFORMATION As %String(EXTERNALSQLNAME = "ORD_REPORTINFORMATION", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 23, SqlFieldName = ORD_REPORTINFORMATION ];
+
+Property ORDREPORTLANGUAGE As %Float(EXTERNALSQLNAME = "ORD_REPORTLANGUAGE", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 66, SqlFieldName = ORD_REPORTLANGUAGE ];
+
+Property ORDSAMPLER As %Float(EXTERNALSQLNAME = "ORD_SAMPLER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 47, SqlFieldName = ORD_SAMPLER ];
+
+Property ORDSAMPLINGADDRESS As %Float(EXTERNALSQLNAME = "ORD_SAMPLINGADDRESS", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 46, SqlFieldName = ORD_SAMPLINGADDRESS ];
+
+Property ORDSAMPLINGLOCATION As %Float(EXTERNALSQLNAME = "ORD_SAMPLINGLOCATION", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 32, SqlFieldName = ORD_SAMPLINGLOCATION ];
+
+Property ORDSCHEDULEOPTIONS As %String(EXTERNALSQLNAME = "ORD_SCHEDULEOPTIONS", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 55, SqlFieldName = ORD_SCHEDULEOPTIONS ];
+
+Property ORDSCHEDULETIME As %Numeric(EXTERNALSQLNAME = "ORD_SCHEDULETIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 18, SqlFieldName = ORD_SCHEDULETIME ];
+
+Property ORDSHORTID As %String(EXTERNALSQLNAME = "ORD_SHORTID", EXTERNALSQLTYPE = 12, MAXLEN = 15) [ SqlColumnNumber = 12, SqlFieldName = ORD_SHORTID ];
+
+Property ORDSPECIFICREPORTS As %String(EXTERNALSQLNAME = "ORD_SPECIFICREPORTS", EXTERNALSQLTYPE = 12, MAXLEN = 1024) [ SqlColumnNumber = 65, SqlFieldName = ORD_SPECIFICREPORTS ];
+
+Property ORDSTATUS As %Float(EXTERNALSQLNAME = "ORD_STATUS", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 24, SqlFieldName = ORD_STATUS ];
+
+Property ORDSTUDY As %Float(EXTERNALSQLNAME = "ORD_STUDY", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 56, SqlFieldName = ORD_STUDY ];
+
+Property ORDSTUDYEPISODE As %String(EXTERNALSQLNAME = "ORD_STUDYEPISODE", EXTERNALSQLTYPE = 12, MAXLEN = 20) [ SqlColumnNumber = 69, SqlFieldName = ORD_STUDYEPISODE ];
+
+Property ORDSYNCHRONIZED As %Float(EXTERNALSQLNAME = "ORD_SYNCHRONIZED", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 70, SqlFieldName = ORD_SYNCHRONIZED ];
+
+Property ORDTARIFFINGSTATUS As %Float(EXTERNALSQLNAME = "ORD_TARIFFINGSTATUS", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 34, SqlFieldName = ORD_TARIFFINGSTATUS ];
+
+Property ORDTREATMENTID As %String(EXTERNALSQLNAME = "ORD_TREATMENTID", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ SqlColumnNumber = 68, SqlFieldName = ORD_TREATMENTID ];
+
+Property ORDURGENCY As %Float(EXTERNALSQLNAME = "ORD_URGENCY", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 15, SqlFieldName = ORD_URGENCY ];
+
+Property ORDVARIABLES As %String(EXTERNALSQLNAME = "ORD_VARIABLES", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 67, SqlFieldName = ORD_VARIABLES ];
+
+Property ORDVERIFIED As %Float(EXTERNALSQLNAME = "ORD_VERIFIED", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 72, SqlFieldName = ORD_VERIFIED ];
+
+Property ORDVERSION As %Float(EXTERNALSQLNAME = "ORD_VERSION", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 45, SqlFieldName = ORD_VERSION ];
+
+Property UORDEXTERNALID As %String(EXTERNALSQLNAME = "U##ORD_EXTERNALID", EXTERNALSQLTYPE = 12, MAXLEN = 40) [ SqlColumnNumber = 7, SqlFieldName = U##ORD_EXTERNALID ];
+
+Property UORDINTERNALID As %String(EXTERNALSQLNAME = "U##ORD_INTERNALID", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ Required, SqlColumnNumber = 3, SqlFieldName = U##ORD_INTERNALID ];
+
+Property UORDSHORTID As %String(EXTERNALSQLNAME = "U##ORD_SHORTID", EXTERNALSQLTYPE = 12, MAXLEN = 15) [ SqlColumnNumber = 11, SqlFieldName = U##ORD_SHORTID ];
+
+Index MainIndex On ORDID [ IdKey, PrimaryKey ];
+
+Storage Default
+{
+<Data name="ORDERDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>ORDADDTOBUDGET</Value>
+</Value>
+<Value name="3">
+<Value>ORDAGENT</Value>
+</Value>
+<Value name="4">
+<Value>ORDARCHIVETIME</Value>
+</Value>
+<Value name="5">
+<Value>ORDARCHIVEUSER</Value>
+</Value>
+<Value name="6">
+<Value>ORDBILLINGMARK</Value>
+</Value>
+<Value name="7">
+<Value>ORDCLOSURETIME</Value>
+</Value>
+<Value name="8">
+<Value>ORDCLOSUREUSER</Value>
+</Value>
+<Value name="9">
+<Value>ORDCOMPLETIONTIME</Value>
+</Value>
+<Value name="10">
+<Value>ORDCONTEXT</Value>
+</Value>
+<Value name="11">
+<Value>ORDCONTEXTDATE</Value>
+</Value>
+<Value name="12">
+<Value>ORDCONTEXTINFO</Value>
+</Value>
+<Value name="13">
+<Value>ORDCREATIONTIME</Value>
+</Value>
+<Value name="14">
+<Value>ORDCREATIONUSER</Value>
+</Value>
+<Value name="15">
+<Value>ORDDEPARTMENT</Value>
+</Value>
+<Value name="16">
+<Value>ORDDESCRIPTION</Value>
+</Value>
+<Value name="17">
+<Value>ORDDIAGNOSIS</Value>
+</Value>
+<Value name="18">
+<Value>ORDDISCONTINUATIONREASON</Value>
+</Value>
+<Value name="19">
+<Value>ORDDISCONTINUATIONTIME</Value>
+</Value>
+<Value name="20">
+<Value>ORDDISCONTINUATIONUSER</Value>
+</Value>
+<Value name="21">
+<Value>ORDDISTANCE</Value>
+</Value>
+<Value name="22">
+<Value>ORDDUETIME</Value>
+</Value>
+<Value name="23">
+<Value>ORDENCOUNTER</Value>
+</Value>
+<Value name="24">
+<Value>ORDEXONERATIONCODE</Value>
+</Value>
+<Value name="25">
+<Value>ORDEXPERTSYSTEMFLAGS</Value>
+</Value>
+<Value name="26">
+<Value>ORDEXTERNALID</Value>
+</Value>
+<Value name="27">
+<Value>ORDFAX</Value>
+</Value>
+<Value name="28">
+<Value>ORDFIELDPROTECTION</Value>
+</Value>
+<Value name="29">
+<Value>ORDFROZEN</Value>
+</Value>
+<Value name="30">
+<Value>ORDFSEISINCOMPLETE</Value>
+</Value>
+<Value name="31">
+<Value>ORDFSEPREAGREEMENTCODE</Value>
+</Value>
+<Value name="32">
+<Value>ORDFSEPREAGREEMENTDATE</Value>
+</Value>
+<Value name="33">
+<Value>ORDFSEPRESCRIPTIONORIGIN</Value>
+</Value>
+<Value name="34">
+<Value>ORDHASFIXEDSPECIMENS</Value>
+</Value>
+<Value name="35">
+<Value>ORDIMAGE</Value>
+</Value>
+<Value name="36">
+<Value>ORDINCOMPLETENESSREASON</Value>
+</Value>
+<Value name="37">
+<Value>ORDINTERNALID</Value>
+</Value>
+<Value name="38">
+<Value>ORDISSUER</Value>
+</Value>
+<Value name="39">
+<Value>ORDISSUERINFO</Value>
+</Value>
+<Value name="40">
+<Value>ORDLASTUPDATETIME</Value>
+</Value>
+<Value name="41">
+<Value>ORDLASTUPDATEUSER</Value>
+</Value>
+<Value name="42">
+<Value>ORDLOG</Value>
+</Value>
+<Value name="43">
+<Value>ORDLOWESTOBJECTTIME</Value>
+</Value>
+<Value name="44">
+<Value>ORDMANUALVALIDATION</Value>
+</Value>
+<Value name="45">
+<Value>ORDOBJECT</Value>
+</Value>
+<Value name="46">
+<Value>ORDORDERSET</Value>
+</Value>
+<Value name="47">
+<Value>ORDPHONE</Value>
+</Value>
+<Value name="48">
+<Value>ORDPHONELOG</Value>
+</Value>
+<Value name="49">
+<Value>ORDPHONERESULTS</Value>
+</Value>
+<Value name="50">
+<Value>ORDPHONESTATUS</Value>
+</Value>
+<Value name="51">
+<Value>ORDPRESCRIPTIONTIME</Value>
+</Value>
+<Value name="52">
+<Value>ORDQUESTION</Value>
+</Value>
+<Value name="53">
+<Value>ORDRECEIPTTIME</Value>
+</Value>
+<Value name="54">
+<Value>ORDREFERRAL</Value>
+</Value>
+<Value name="55">
+<Value>ORDREPORTCOPYRECEIVER</Value>
+</Value>
+<Value name="56">
+<Value>ORDREPORTINFORMATION</Value>
+</Value>
+<Value name="57">
+<Value>ORDREPORTLANGUAGE</Value>
+</Value>
+<Value name="58">
+<Value>ORDSAMPLER</Value>
+</Value>
+<Value name="59">
+<Value>ORDSAMPLINGADDRESS</Value>
+</Value>
+<Value name="60">
+<Value>ORDSAMPLINGLOCATION</Value>
+</Value>
+<Value name="61">
+<Value>ORDSCHEDULEOPTIONS</Value>
+</Value>
+<Value name="62">
+<Value>ORDSCHEDULETIME</Value>
+</Value>
+<Value name="63">
+<Value>ORDSHORTID</Value>
+</Value>
+<Value name="64">
+<Value>ORDSPECIFICREPORTS</Value>
+</Value>
+<Value name="65">
+<Value>ORDSTATUS</Value>
+</Value>
+<Value name="66">
+<Value>ORDSTUDY</Value>
+</Value>
+<Value name="67">
+<Value>ORDSTUDYEPISODE</Value>
+</Value>
+<Value name="68">
+<Value>ORDSYNCHRONIZED</Value>
+</Value>
+<Value name="69">
+<Value>ORDTARIFFINGSTATUS</Value>
+</Value>
+<Value name="70">
+<Value>ORDTREATMENTID</Value>
+</Value>
+<Value name="71">
+<Value>ORDURGENCY</Value>
+</Value>
+<Value name="72">
+<Value>ORDVARIABLES</Value>
+</Value>
+<Value name="73">
+<Value>ORDVERIFIED</Value>
+</Value>
+<Value name="74">
+<Value>ORDVERSION</Value>
+</Value>
+<Value name="75">
+<Value>UORDEXTERNALID</Value>
+</Value>
+<Value name="76">
+<Value>UORDINTERNALID</Value>
+</Value>
+<Value name="77">
+<Value>UORDSHORTID</Value>
+</Value>
+</Data>
+<DataLocation>^CHUBXL.DB.GLIMS.ORDERD</DataLocation>
+<DefaultData>ORDERDefaultData</DefaultData>
+<IdLocation>^CHUBXL.DB.GLIMS.ORDERD</IdLocation>
+<IndexLocation>^CHUBXL.DB.GLIMS.ORDERI</IndexLocation>
+<StreamLocation>^CHUBXL.DB.GLIMS.ORDERS</StreamLocation>
+<Type>%Library.CacheStorage</Type>
+}
+
+}

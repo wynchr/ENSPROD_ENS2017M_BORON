@@ -1,0 +1,394 @@
+Class CHUBXL.DB.GLIMS.CORRESPONDENT Extends %Library.Persistent [ ClassType = persistent, Not ProcedureBlock, SqlRowIdPrivate, SqlTableName = CORRESPONDENT ]
+{
+
+Parameter CONNECTION = "GLIMS,NOCREATE";
+
+Parameter EXTDBNAME = "Oracle";
+
+Parameter EXTERNALTABLENAME = "ORAGLIMS.CORRESPONDENT";
+
+Property CRSPACCOUNT As %Float(EXTERNALSQLNAME = "CRSP_ACCOUNT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 58, SqlFieldName = CRSP_ACCOUNT ];
+
+Property CRSPACTIVESINCE As %TimeStamp(EXTERNALSQLNAME = "CRSP_ACTIVESINCE", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 8, SqlFieldName = CRSP_ACTIVESINCE ];
+
+Property CRSPACTIVEUNTIL As %TimeStamp(EXTERNALSQLNAME = "CRSP_ACTIVEUNTIL", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 9, SqlFieldName = CRSP_ACTIVEUNTIL ];
+
+Property CRSPADDRESSING As %String(EXTERNALSQLNAME = "CRSP_ADDRESSING", EXTERNALSQLTYPE = 12, MAXLEN = 70) [ SqlColumnNumber = 13, SqlFieldName = CRSP_ADDRESSING ];
+
+Property CRSPADDRESSLINE1 As %String(EXTERNALSQLNAME = "CRSP_ADDRESSLINE1", EXTERNALSQLTYPE = 12, MAXLEN = 65) [ SqlColumnNumber = 15, SqlFieldName = CRSP_ADDRESSLINE1 ];
+
+Property CRSPADDRESSLINE2 As %String(EXTERNALSQLNAME = "CRSP_ADDRESSLINE2", EXTERNALSQLTYPE = 12, MAXLEN = 65) [ SqlColumnNumber = 16, SqlFieldName = CRSP_ADDRESSLINE2 ];
+
+Property CRSPALTUNITSONREPORT As %Float(EXTERNALSQLNAME = "CRSP_ALTUNITSONREPORT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 27, SqlFieldName = CRSP_ALTUNITSONREPORT ];
+
+Property CRSPBANKACCOUNT As %String(EXTERNALSQLNAME = "CRSP_BANKACCOUNT", EXTERNALSQLTYPE = 12, MAXLEN = 40) [ SqlColumnNumber = 31, SqlFieldName = CRSP_BANKACCOUNT ];
+
+Property CRSPBANKID As %String(EXTERNALSQLNAME = "CRSP_BANKID", EXTERNALSQLTYPE = 12, MAXLEN = 10) [ SqlColumnNumber = 33, SqlFieldName = CRSP_BANKID ];
+
+Property CRSPBANKIDENTIFIERCODE As %String(EXTERNALSQLNAME = "CRSP_BANKIDENTIFIERCODE", EXTERNALSQLTYPE = 12, MAXLEN = 11) [ SqlColumnNumber = 74, SqlFieldName = CRSP_BANKIDENTIFIERCODE ];
+
+Property CRSPBILLINGCOMMENT As %String(EXTERNALSQLNAME = "CRSP_BILLINGCOMMENT", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 66, SqlFieldName = CRSP_BILLINGCOMMENT ];
+
+Property CRSPBILLINGDOCUMENTTEXT As %Float(EXTERNALSQLNAME = "CRSP_BILLINGDOCUMENTTEXT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 38, SqlFieldName = CRSP_BILLINGDOCUMENTTEXT ];
+
+Property CRSPBILLINGMARK As %String(EXTERNALSQLNAME = "CRSP_BILLINGMARK", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 70, SqlFieldName = CRSP_BILLINGMARK ];
+
+Property CRSPCHECKINVOICING As %Float(EXTERNALSQLNAME = "CRSP_CHECKINVOICING", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 35, SqlFieldName = CRSP_CHECKINVOICING ];
+
+Property CRSPCLASS As %Float(EXTERNALSQLNAME = "CRSP_CLASS", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 12, SqlFieldName = CRSP_CLASS ];
+
+Property CRSPCODINGSYSTEM As %Float(EXTERNALSQLNAME = "CRSP_CODINGSYSTEM", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 51, SqlFieldName = CRSP_CODINGSYSTEM ];
+
+Property CRSPCOORDINATOR As %Float(EXTERNALSQLNAME = "CRSP_COORDINATOR", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 61, SqlFieldName = CRSP_COORDINATOR ];
+
+Property CRSPCREATIONTIME As %Numeric(EXTERNALSQLNAME = "CRSP_CREATIONTIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 44, SqlFieldName = CRSP_CREATIONTIME ];
+
+Property CRSPCREATIONUSER As %Float(EXTERNALSQLNAME = "CRSP_CREATIONUSER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 43, SqlFieldName = CRSP_CREATIONUSER ];
+
+Property CRSPDISCOUNTCODE As %Float(EXTERNALSQLNAME = "CRSP_DISCOUNTCODE", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 68, SqlFieldName = CRSP_DISCOUNTCODE ];
+
+Property CRSPEMAIL As %String(EXTERNALSQLNAME = "CRSP_EMAIL", EXTERNALSQLTYPE = 12, MAXLEN = 80) [ SqlColumnNumber = 24, SqlFieldName = CRSP_EMAIL ];
+
+Property CRSPEXCHANGENUMBER As %String(EXTERNALSQLNAME = "CRSP_EXCHANGENUMBER", EXTERNALSQLTYPE = 12, MAXLEN = 15) [ SqlColumnNumber = 32, SqlFieldName = CRSP_EXCHANGENUMBER ];
+
+Property CRSPFAX As %String(EXTERNALSQLNAME = "CRSP_FAX", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 21, SqlFieldName = CRSP_FAX ];
+
+Property CRSPFAX2 As %String(EXTERNALSQLNAME = "CRSP_FAX2", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 22, SqlFieldName = CRSP_FAX2 ];
+
+Property CRSPFEEACCOUNT As %Float(EXTERNALSQLNAME = "CRSP_FEEACCOUNT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 57, SqlFieldName = CRSP_FEEACCOUNT ];
+
+Property CRSPHOUSENUMBER As %Float(EXTERNALSQLNAME = "CRSP_HOUSENUMBER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 52, SqlFieldName = CRSP_HOUSENUMBER ];
+
+Property CRSPHOUSENUMBERAPPENDIX As %String(EXTERNALSQLNAME = "CRSP_HOUSENUMBERAPPENDIX", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ SqlColumnNumber = 53, SqlFieldName = CRSP_HOUSENUMBERAPPENDIX ];
+
+Property CRSPID As %Float(EXTERNALSQLNAME = "CRSP_ID", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 2, SqlFieldName = CRSP_ID ];
+
+Property CRSPIDENTIFICATIONCHECK As %Float(EXTERNALSQLNAME = "CRSP_IDENTIFICATIONCHECK", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 25, SqlFieldName = CRSP_IDENTIFICATIONCHECK ];
+
+Property CRSPIDENTIFICATIONCODE As %Float(EXTERNALSQLNAME = "CRSP_IDENTIFICATIONCODE", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 49, SqlFieldName = CRSP_IDENTIFICATIONCODE ];
+
+Property CRSPINTERIMREPORTCOUNT As %Float(EXTERNALSQLNAME = "CRSP_INTERIMREPORTCOUNT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 72, SqlFieldName = CRSP_INTERIMREPORTCOUNT ];
+
+Property CRSPINTERNALID As %String(EXTERNALSQLNAME = "CRSP_INTERNALID", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ Required, SqlColumnNumber = 5, SqlFieldName = CRSP_INTERNALID ];
+
+Property CRSPINVOICECOPYCOUNT As %Float(EXTERNALSQLNAME = "CRSP_INVOICECOPYCOUNT", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 40, SqlFieldName = CRSP_INVOICECOPYCOUNT ];
+
+Property CRSPINVOICEGROUPINGTYPE As %Float(EXTERNALSQLNAME = "CRSP_INVOICEGROUPINGTYPE", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 36, SqlFieldName = CRSP_INVOICEGROUPINGTYPE ];
+
+Property CRSPINVOICESUMMARYLAYOUT As %Float(EXTERNALSQLNAME = "CRSP_INVOICESUMMARYLAYOUT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 37, SqlFieldName = CRSP_INVOICESUMMARYLAYOUT ];
+
+Property CRSPISSUERINFO As %String(EXTERNALSQLNAME = "CRSP_ISSUERINFO", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 42, SqlFieldName = CRSP_ISSUERINFO ];
+
+Property CRSPLANGUAGE As %Float(EXTERNALSQLNAME = "CRSP_LANGUAGE", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 10, SqlFieldName = CRSP_LANGUAGE ];
+
+Property CRSPLASTUPDATETIME As %Numeric(EXTERNALSQLNAME = "CRSP_LASTUPDATETIME", EXTERNALSQLTYPE = 3, MAXVAL = 99999999999999999.999999, MINVAL = -99999999999999999.999999, SCALE = 6) [ SqlColumnNumber = 46, SqlFieldName = CRSP_LASTUPDATETIME ];
+
+Property CRSPLASTUPDATEUSER As %Float(EXTERNALSQLNAME = "CRSP_LASTUPDATEUSER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 45, SqlFieldName = CRSP_LASTUPDATEUSER ];
+
+Property CRSPMANUALVALIDATION As %Float(EXTERNALSQLNAME = "CRSP_MANUALVALIDATION", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 29, SqlFieldName = CRSP_MANUALVALIDATION ];
+
+Property CRSPMAXIMUMINTERIMREPORTS As %Float(EXTERNALSQLNAME = "CRSP_MAXIMUMINTERIMREPORTS", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 71, SqlFieldName = CRSP_MAXIMUMINTERIMREPORTS ];
+
+Property CRSPMOBILEPHONE As %String(EXTERNALSQLNAME = "CRSP_MOBILEPHONE", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 20, SqlFieldName = CRSP_MOBILEPHONE ];
+
+Property CRSPMODEM As %String(EXTERNALSQLNAME = "CRSP_MODEM", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 23, SqlFieldName = CRSP_MODEM ];
+
+Property CRSPMUNICIPALITY As %Float(EXTERNALSQLNAME = "CRSP_MUNICIPALITY", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 17, SqlFieldName = CRSP_MUNICIPALITY ];
+
+Property CRSPNAME As %String(EXTERNALSQLNAME = "CRSP_NAME", EXTERNALSQLTYPE = 12, MAXLEN = 70) [ Required, SqlColumnNumber = 7, SqlFieldName = CRSP_NAME ];
+
+Property CRSPNAMEEXTENSION As %String(EXTERNALSQLNAME = "CRSP_NAMEEXTENSION", EXTERNALSQLTYPE = 12, MAXLEN = 70) [ SqlColumnNumber = 14, SqlFieldName = CRSP_NAMEEXTENSION ];
+
+Property CRSPPAYER As %Float(EXTERNALSQLNAME = "CRSP_PAYER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 34, SqlFieldName = CRSP_PAYER ];
+
+Property CRSPPAYMENTTERM As %Float(EXTERNALSQLNAME = "CRSP_PAYMENTTERM", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 41, SqlFieldName = CRSP_PAYMENTTERM ];
+
+Property CRSPPHONE As %String(EXTERNALSQLNAME = "CRSP_PHONE", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 18, SqlFieldName = CRSP_PHONE ];
+
+Property CRSPPHONE2 As %String(EXTERNALSQLNAME = "CRSP_PHONE2", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 19, SqlFieldName = CRSP_PHONE2 ];
+
+Property CRSPPHONECOMMENT As %String(EXTERNALSQLNAME = "CRSP_PHONECOMMENT", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 59, SqlFieldName = CRSP_PHONECOMMENT ];
+
+Property CRSPPRICELIST As %Float(EXTERNALSQLNAME = "CRSP_PRICELIST", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 65, SqlFieldName = CRSP_PRICELIST ];
+
+Property CRSPPRINTER As %Float(EXTERNALSQLNAME = "CRSP_PRINTER", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 11, SqlFieldName = CRSP_PRINTER ];
+
+Property CRSPPROTECTIMPORTEDDATA As %Float(EXTERNALSQLNAME = "CRSP_PROTECTIMPORTEDDATA", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 50, SqlFieldName = CRSP_PROTECTIMPORTEDDATA ];
+
+Property CRSPREPORTCOPYCOUNT As %Float(EXTERNALSQLNAME = "CRSP_REPORTCOPYCOUNT", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 30, SqlFieldName = CRSP_REPORTCOPYCOUNT ];
+
+Property CRSPSERVICE As %Float(EXTERNALSQLNAME = "CRSP_SERVICE", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 26, SqlFieldName = CRSP_SERVICE ];
+
+Property CRSPSOUNDEX As %String(EXTERNALSQLNAME = "CRSP_SOUNDEX", EXTERNALSQLTYPE = 12, MAXLEN = 10) [ SqlColumnNumber = 62, SqlFieldName = CRSP_SOUNDEX ];
+
+Property CRSPSPECTRUM As %Float(EXTERNALSQLNAME = "CRSP_SPECTRUM", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 63, SqlFieldName = CRSP_SPECTRUM ];
+
+Property CRSPSTATUSCOMMENT As %String(EXTERNALSQLNAME = "CRSP_STATUSCOMMENT", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 67, SqlFieldName = CRSP_STATUSCOMMENT ];
+
+Property CRSPSTREET As %String(EXTERNALSQLNAME = "CRSP_STREET", EXTERNALSQLTYPE = 12, MAXLEN = 70) [ SqlColumnNumber = 54, SqlFieldName = CRSP_STREET ];
+
+Property CRSPSUPPRESSAUTOCOMMENTS As %Float(EXTERNALSQLNAME = "CRSP_SUPPRESSAUTOCOMMENTS", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 28, SqlFieldName = CRSP_SUPPRESSAUTOCOMMENTS ];
+
+Property CRSPTARIFFINGLAB As %Float(EXTERNALSQLNAME = "CRSP_TARIFFINGLAB", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 64, SqlFieldName = CRSP_TARIFFINGLAB ];
+
+Property CRSPTOURCOMMENT As %String(EXTERNALSQLNAME = "CRSP_TOURCOMMENT", EXTERNALSQLTYPE = 12, MAXLEN = 3999) [ SqlColumnNumber = 60, SqlFieldName = CRSP_TOURCOMMENT ];
+
+Property CRSPTYPE As %Float(EXTERNALSQLNAME = "CRSP_TYPE", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 3, SqlFieldName = CRSP_TYPE ];
+
+Property CRSPUNITPREFERENCE As %Float(EXTERNALSQLNAME = "CRSP_UNITPREFERENCE", EXTERNALSQLTYPE = 6) [ Required, SqlColumnNumber = 48, SqlFieldName = CRSP_UNITPREFERENCE ];
+
+Property CRSPVATNO As %String(EXTERNALSQLNAME = "CRSP_VATNO", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ SqlColumnNumber = 39, SqlFieldName = CRSP_VATNO ];
+
+Property CRSPVERSION As %Float(EXTERNALSQLNAME = "CRSP_VERSION", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 47, SqlFieldName = CRSP_VERSION ];
+
+Property CRSPWEBSITE As %String(EXTERNALSQLNAME = "CRSP_WEBSITE", EXTERNALSQLTYPE = 12, MAXLEN = 80) [ SqlColumnNumber = 73, SqlFieldName = CRSP_WEBSITE ];
+
+Property UCRSPADDRESSLINE1 As %String(EXTERNALSQLNAME = "U##CRSP_ADDRESSLINE1", EXTERNALSQLTYPE = 12, MAXLEN = 65) [ SqlColumnNumber = 75, SqlFieldName = U##CRSP_ADDRESSLINE1 ];
+
+Property UCRSPBANKACCOUNT As %String(EXTERNALSQLNAME = "U##CRSP_BANKACCOUNT", EXTERNALSQLTYPE = 12, MAXLEN = 40) [ SqlColumnNumber = 55, SqlFieldName = U##CRSP_BANKACCOUNT ];
+
+Property UCRSPBANKID As %String(EXTERNALSQLNAME = "U##CRSP_BANKID", EXTERNALSQLTYPE = 12, MAXLEN = 10) [ SqlColumnNumber = 56, SqlFieldName = U##CRSP_BANKID ];
+
+Property UCRSPINTERNALID As %String(EXTERNALSQLNAME = "U##CRSP_INTERNALID", EXTERNALSQLTYPE = 12, MAXLEN = 60) [ Required, SqlColumnNumber = 4, SqlFieldName = U##CRSP_INTERNALID ];
+
+Property UCRSPNAME As %String(EXTERNALSQLNAME = "U##CRSP_NAME", EXTERNALSQLTYPE = 12, MAXLEN = 70) [ Required, SqlColumnNumber = 6, SqlFieldName = U##CRSP_NAME ];
+
+Property UCRSPSOUNDEX As %String(EXTERNALSQLNAME = "U##CRSP_SOUNDEX", EXTERNALSQLTYPE = 12, MAXLEN = 10) [ SqlColumnNumber = 69, SqlFieldName = U##CRSP_SOUNDEX ];
+
+Index MainIndex On CRSPID [ IdKey, PrimaryKey ];
+
+Storage Default
+{
+<Data name="CORRESPONDENTDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>CRSPACCOUNT</Value>
+</Value>
+<Value name="3">
+<Value>CRSPACTIVESINCE</Value>
+</Value>
+<Value name="4">
+<Value>CRSPACTIVEUNTIL</Value>
+</Value>
+<Value name="5">
+<Value>CRSPADDRESSING</Value>
+</Value>
+<Value name="6">
+<Value>CRSPADDRESSLINE1</Value>
+</Value>
+<Value name="7">
+<Value>CRSPADDRESSLINE2</Value>
+</Value>
+<Value name="8">
+<Value>CRSPALTUNITSONREPORT</Value>
+</Value>
+<Value name="9">
+<Value>CRSPBANKACCOUNT</Value>
+</Value>
+<Value name="10">
+<Value>CRSPBANKID</Value>
+</Value>
+<Value name="11">
+<Value>CRSPBANKIDENTIFIERCODE</Value>
+</Value>
+<Value name="12">
+<Value>CRSPBILLINGCOMMENT</Value>
+</Value>
+<Value name="13">
+<Value>CRSPBILLINGDOCUMENTTEXT</Value>
+</Value>
+<Value name="14">
+<Value>CRSPBILLINGMARK</Value>
+</Value>
+<Value name="15">
+<Value>CRSPCHECKINVOICING</Value>
+</Value>
+<Value name="16">
+<Value>CRSPCLASS</Value>
+</Value>
+<Value name="17">
+<Value>CRSPCODINGSYSTEM</Value>
+</Value>
+<Value name="18">
+<Value>CRSPCOORDINATOR</Value>
+</Value>
+<Value name="19">
+<Value>CRSPCREATIONTIME</Value>
+</Value>
+<Value name="20">
+<Value>CRSPCREATIONUSER</Value>
+</Value>
+<Value name="21">
+<Value>CRSPDISCOUNTCODE</Value>
+</Value>
+<Value name="22">
+<Value>CRSPEMAIL</Value>
+</Value>
+<Value name="23">
+<Value>CRSPEXCHANGENUMBER</Value>
+</Value>
+<Value name="24">
+<Value>CRSPFAX</Value>
+</Value>
+<Value name="25">
+<Value>CRSPFAX2</Value>
+</Value>
+<Value name="26">
+<Value>CRSPFEEACCOUNT</Value>
+</Value>
+<Value name="27">
+<Value>CRSPHOUSENUMBER</Value>
+</Value>
+<Value name="28">
+<Value>CRSPHOUSENUMBERAPPENDIX</Value>
+</Value>
+<Value name="29">
+<Value>CRSPIDENTIFICATIONCHECK</Value>
+</Value>
+<Value name="30">
+<Value>CRSPIDENTIFICATIONCODE</Value>
+</Value>
+<Value name="31">
+<Value>CRSPINTERIMREPORTCOUNT</Value>
+</Value>
+<Value name="32">
+<Value>CRSPINTERNALID</Value>
+</Value>
+<Value name="33">
+<Value>CRSPINVOICECOPYCOUNT</Value>
+</Value>
+<Value name="34">
+<Value>CRSPINVOICEGROUPINGTYPE</Value>
+</Value>
+<Value name="35">
+<Value>CRSPINVOICESUMMARYLAYOUT</Value>
+</Value>
+<Value name="36">
+<Value>CRSPISSUERINFO</Value>
+</Value>
+<Value name="37">
+<Value>CRSPLANGUAGE</Value>
+</Value>
+<Value name="38">
+<Value>CRSPLASTUPDATETIME</Value>
+</Value>
+<Value name="39">
+<Value>CRSPLASTUPDATEUSER</Value>
+</Value>
+<Value name="40">
+<Value>CRSPMANUALVALIDATION</Value>
+</Value>
+<Value name="41">
+<Value>CRSPMAXIMUMINTERIMREPORTS</Value>
+</Value>
+<Value name="42">
+<Value>CRSPMOBILEPHONE</Value>
+</Value>
+<Value name="43">
+<Value>CRSPMODEM</Value>
+</Value>
+<Value name="44">
+<Value>CRSPMUNICIPALITY</Value>
+</Value>
+<Value name="45">
+<Value>CRSPNAME</Value>
+</Value>
+<Value name="46">
+<Value>CRSPNAMEEXTENSION</Value>
+</Value>
+<Value name="47">
+<Value>CRSPPAYER</Value>
+</Value>
+<Value name="48">
+<Value>CRSPPAYMENTTERM</Value>
+</Value>
+<Value name="49">
+<Value>CRSPPHONE</Value>
+</Value>
+<Value name="50">
+<Value>CRSPPHONE2</Value>
+</Value>
+<Value name="51">
+<Value>CRSPPHONECOMMENT</Value>
+</Value>
+<Value name="52">
+<Value>CRSPPRICELIST</Value>
+</Value>
+<Value name="53">
+<Value>CRSPPRINTER</Value>
+</Value>
+<Value name="54">
+<Value>CRSPPROTECTIMPORTEDDATA</Value>
+</Value>
+<Value name="55">
+<Value>CRSPREPORTCOPYCOUNT</Value>
+</Value>
+<Value name="56">
+<Value>CRSPSERVICE</Value>
+</Value>
+<Value name="57">
+<Value>CRSPSOUNDEX</Value>
+</Value>
+<Value name="58">
+<Value>CRSPSPECTRUM</Value>
+</Value>
+<Value name="59">
+<Value>CRSPSTATUSCOMMENT</Value>
+</Value>
+<Value name="60">
+<Value>CRSPSTREET</Value>
+</Value>
+<Value name="61">
+<Value>CRSPSUPPRESSAUTOCOMMENTS</Value>
+</Value>
+<Value name="62">
+<Value>CRSPTARIFFINGLAB</Value>
+</Value>
+<Value name="63">
+<Value>CRSPTOURCOMMENT</Value>
+</Value>
+<Value name="64">
+<Value>CRSPTYPE</Value>
+</Value>
+<Value name="65">
+<Value>CRSPUNITPREFERENCE</Value>
+</Value>
+<Value name="66">
+<Value>CRSPVATNO</Value>
+</Value>
+<Value name="67">
+<Value>CRSPVERSION</Value>
+</Value>
+<Value name="68">
+<Value>CRSPWEBSITE</Value>
+</Value>
+<Value name="69">
+<Value>UCRSPADDRESSLINE1</Value>
+</Value>
+<Value name="70">
+<Value>UCRSPBANKACCOUNT</Value>
+</Value>
+<Value name="71">
+<Value>UCRSPBANKID</Value>
+</Value>
+<Value name="72">
+<Value>UCRSPINTERNALID</Value>
+</Value>
+<Value name="73">
+<Value>UCRSPNAME</Value>
+</Value>
+<Value name="74">
+<Value>UCRSPSOUNDEX</Value>
+</Value>
+</Data>
+<DataLocation>^CHUBXL.DB.GLIMS.CORRESPONDENTD</DataLocation>
+<DefaultData>CORRESPONDENTDefaultData</DefaultData>
+<IdLocation>^CHUBXL.DB.GLIMS.CORRESPONDENTD</IdLocation>
+<IndexLocation>^CHUBXL.DB.GLIMS.CORRESPONDENTI</IndexLocation>
+<StreamLocation>^CHUBXL.DB.GLIMS.CORRESPONDENTS</StreamLocation>
+<Type>%Library.CacheStorage</Type>
+}
+
+}

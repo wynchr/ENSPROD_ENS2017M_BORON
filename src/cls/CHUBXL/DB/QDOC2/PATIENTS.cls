@@ -1,0 +1,109 @@
+Class CHUBXL.DB.QDOC2.PATIENTS Extends %Library.Persistent [ ClassType = persistent, Not ProcedureBlock, SqlRowIdPrivate, SqlTableName = PATIENTS, StorageStrategy = GSQLStorage ]
+{
+
+Property PBIRTHPLACE As %String(EXTERNALSQLNAME = "P_BIRTHPLACE", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 28, SqlFieldName = P_BIRTHPLACE ];
+
+Property PBIRTHPLACEZIP As %String(EXTERNALSQLNAME = "P_BIRTHPLACE_ZIP", EXTERNALSQLTYPE = 12, MAXLEN = 20) [ SqlColumnNumber = 27, SqlFieldName = P_BIRTHPLACE_ZIP ];
+
+Property PBORN As %TimeStamp(EXTERNALSQLNAME = "P_BORN", EXTERNALSQLTYPE = 93) [ Required, SqlColumnNumber = 7, SqlFieldName = P_BORN ];
+
+Property PCARDNR As %String(EXTERNALSQLNAME = "P_CARDNR", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 35, SqlFieldName = P_CARDNR ];
+
+Property PCHANGEDATE As %TimeStamp(EXTERNALSQLNAME = "P_CHANGEDATE", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 23, SqlFieldName = P_CHANGEDATE ];
+
+Property PCHANGEDBY As %String(EXTERNALSQLNAME = "P_CHANGEDBY", EXTERNALSQLTYPE = 12, MAXLEN = 40) [ SqlColumnNumber = 22, SqlFieldName = P_CHANGEDBY ];
+
+Property PCHILDREN As %Numeric(EXTERNALSQLNAME = "P_CHILDREN", EXTERNALSQLTYPE = 3, MAXVAL = 99999, MINVAL = -99999, SCALE = 0) [ SqlColumnNumber = 16, SqlFieldName = P_CHILDREN ];
+
+Property PCODE As %String(EXTERNALSQLNAME = "P_CODE", EXTERNALSQLTYPE = 12, MAXLEN = 20) [ Required, SqlColumnNumber = 3, SqlFieldName = P_CODE ];
+
+Property PCOUNTRY As %Numeric(EXTERNALSQLNAME = "P_COUNTRY", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 34, SqlFieldName = P_COUNTRY ];
+
+Property PDATEDIED As %TimeStamp(EXTERNALSQLNAME = "P_DATEDIED", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 41, SqlFieldName = P_DATEDIED ];
+
+Property PDATEINVALID As %TimeStamp(EXTERNALSQLNAME = "P_DATEINVALID", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 32, SqlFieldName = P_DATEINVALID ];
+
+Property PDEFAULTCARRIER As %String(EXTERNALSQLNAME = "P_DEFAULTCARRIER", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 44, SqlFieldName = P_DEFAULTCARRIER ];
+
+Property PDISPLAYNAME As %String(EXTERNALSQLNAME = "P_DISPLAYNAME", EXTERNALSQLTYPE = 12, MAXLEN = 150) [ SqlColumnNumber = 39, SqlFieldName = P_DISPLAYNAME ];
+
+Property PEXTRACODE As %String(EXTERNALSQLNAME = "P_EXTRACODE", EXTERNALSQLTYPE = 12, MAXLEN = 90) [ SqlColumnNumber = 30, SqlFieldName = P_EXTRACODE ];
+
+Property PFAX As %String(EXTERNALSQLNAME = "P_FAX", EXTERNALSQLTYPE = 12, MAXLEN = 15) [ SqlColumnNumber = 43, SqlFieldName = P_FAX ];
+
+Property PFNAME As %String(EXTERNALSQLNAME = "P_FNAME", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 6, SqlFieldName = P_FNAME ];
+
+Property PFPARTNER As %String(EXTERNALSQLNAME = "P_FPARTNER", EXTERNALSQLTYPE = 12, MAXLEN = 15) [ SqlColumnNumber = 24, SqlFieldName = P_FPARTNER ];
+
+Property PKEY As %Numeric(EXTERNALSQLNAME = "P_KEY", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ Required, SqlColumnNumber = 2, SqlFieldName = P_KEY ];
+
+Property PLANGUAGE As %Numeric(EXTERNALSQLNAME = "P_LANGUAGE", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 33, SqlFieldName = P_LANGUAGE ];
+
+Property PMARITSTATUS As %String(EXTERNALSQLNAME = "P_MARITSTATUS", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 14, SqlFieldName = P_MARITSTATUS ];
+
+Property PMASTERKEY As %Numeric(EXTERNALSQLNAME = "P_MASTERKEY", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 31, SqlFieldName = P_MASTERKEY ];
+
+Property PMNAME As %String(EXTERNALSQLNAME = "P_MNAME", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 45, SqlFieldName = P_MNAME ];
+
+Property PMNAMESOUNDEX As %String(EXTERNALSQLNAME = "P_MNAME_SOUNDEX", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 46, SqlFieldName = P_MNAME_SOUNDEX ];
+
+Property PNAME As %String(EXTERNALSQLNAME = "P_NAME", EXTERNALSQLTYPE = 12, MAXLEN = 64) [ Required, SqlColumnNumber = 5, SqlFieldName = P_NAME ];
+
+Property PNATIONALITY As %Numeric(EXTERNALSQLNAME = "P_NATIONALITY", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 38, SqlFieldName = P_NATIONALITY ];
+
+Property PNATNUMBER As %String(EXTERNALSQLNAME = "P_NATNUMBER", EXTERNALSQLTYPE = 12, MAXLEN = 20) [ SqlColumnNumber = 4, SqlFieldName = P_NATNUMBER ];
+
+Property PPARTNER As %String(EXTERNALSQLNAME = "P_PARTNER", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 15, SqlFieldName = P_PARTNER ];
+
+Property PPERSON As %Numeric(EXTERNALSQLNAME = "P_PERSON", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 40, SqlFieldName = P_PERSON ];
+
+Property PPERSONEEL As %String(EXTERNALSQLNAME = "P_PERSONEEL", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 26, SqlFieldName = P_PERSONEEL ];
+
+Property PPHONE As %String(EXTERNALSQLNAME = "P_PHONE", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 13, SqlFieldName = P_PHONE ];
+
+Property PPHYSICIAN As %Numeric(EXTERNALSQLNAME = "P_PHYSICIAN", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 19, SqlFieldName = P_PHYSICIAN ];
+
+Property PPROFESSION As %String(EXTERNALSQLNAME = "P_PROFESSION", EXTERNALSQLTYPE = 12, MAXLEN = 20) [ SqlColumnNumber = 17, SqlFieldName = P_PROFESSION ];
+
+Property PREMARK As %String(EXTERNALSQLNAME = "P_REMARK", EXTERNALSQLTYPE = 12, MAXLEN = 254) [ SqlColumnNumber = 20, SqlFieldName = P_REMARK ];
+
+Property PSECONDPHONE As %String(EXTERNALSQLNAME = "P_SECONDPHONE", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 29, SqlFieldName = P_SECONDPHONE ];
+
+Property PSEX As %String(EXTERNALSQLNAME = "P_SEX", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ Required, SqlColumnNumber = 8, SqlFieldName = P_SEX ];
+
+Property PSISCODE As %String(EXTERNALSQLNAME = "P_SISCODE", EXTERNALSQLTYPE = 12, MAXLEN = 50) [ SqlColumnNumber = 36, SqlFieldName = P_SISCODE ];
+
+Property PSOUNDEX As %String(EXTERNALSQLNAME = "P_SOUNDEX", EXTERNALSQLTYPE = 12, MAXLEN = 95) [ SqlColumnNumber = 21, SqlFieldName = P_SOUNDEX ];
+
+Property PSOUNDEXP As %String(EXTERNALSQLNAME = "P_SOUNDEX_P", EXTERNALSQLTYPE = 12, MAXLEN = 95) [ SqlColumnNumber = 25, SqlFieldName = P_SOUNDEX_P ];
+
+Property PSTATUS As %String(EXTERNALSQLNAME = "P_STATUS", EXTERNALSQLTYPE = 12, MAXLEN = 12) [ Required, SqlColumnNumber = 18, SqlFieldName = P_STATUS ];
+
+Property PSTREET As %String(EXTERNALSQLNAME = "P_STREET", EXTERNALSQLTYPE = 12, MAXLEN = 254) [ SqlColumnNumber = 9, SqlFieldName = P_STREET ];
+
+Property PSTREETNR As %String(EXTERNALSQLNAME = "P_STREETNR", EXTERNALSQLTYPE = 12, MAXLEN = 254) [ SqlColumnNumber = 10, SqlFieldName = P_STREETNR ];
+
+Property PTITLE As %String(EXTERNALSQLNAME = "P_TITLE", EXTERNALSQLTYPE = 12, MAXLEN = 100) [ SqlColumnNumber = 37, SqlFieldName = P_TITLE ];
+
+Property PTOWN As %String(EXTERNALSQLNAME = "P_TOWN", EXTERNALSQLTYPE = 12, MAXLEN = 30) [ SqlColumnNumber = 12, SqlFieldName = P_TOWN ];
+
+Property PVIP As %String(EXTERNALSQLNAME = "P_VIP", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 42, SqlFieldName = P_VIP ];
+
+Property PZIP As %String(EXTERNALSQLNAME = "P_ZIP", EXTERNALSQLTYPE = 12, MAXLEN = 20) [ SqlColumnNumber = 11, SqlFieldName = P_ZIP ];
+
+Index MainIndex On PKEY [ IdKey, PrimaryKey ];
+
+Parameter CONNECTION = "QDOC2,NOCREATE";
+
+Parameter EXTDBNAME = "Oracle";
+
+Parameter EXTERNALTABLENAME = "SYSADM.PATIENTS";
+
+Storage GSQLStorage
+{
+<ExtentSize>100000</ExtentSize>
+<StreamLocation>^CHUBXL.DB.QDOC2.PATIENTSS</StreamLocation>
+<Type>%CacheSQLStorage</Type>
+}
+
+}

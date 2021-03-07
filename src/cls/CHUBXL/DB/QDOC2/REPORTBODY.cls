@@ -1,0 +1,53 @@
+Class CHUBXL.DB.QDOC2.REPORTBODY Extends %Library.Persistent [ ClassType = persistent, Not ProcedureBlock, SqlRowIdPrivate, SqlTableName = REPORT_BODY, StorageStrategy = GSQLStorage ]
+{
+
+Property LCONCLUSION As %String(EXTERNALSQLNAME = "L_CONCLUSION", EXTERNALSQLTYPE = 12, MAXLEN = 160) [ SqlColumnNumber = 12, SqlFieldName = L_CONCLUSION ];
+
+Property LDATELASTCHANGED As %TimeStamp(EXTERNALSQLNAME = "L_DATELASTCHANGED", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 8, SqlFieldName = L_DATELASTCHANGED ];
+
+Property LDATEWRITTEN As %TimeStamp(EXTERNALSQLNAME = "L_DATEWRITTEN", EXTERNALSQLTYPE = 93) [ SqlColumnNumber = 6, SqlFieldName = L_DATEWRITTEN ];
+
+Property LKEY As %Numeric(EXTERNALSQLNAME = "L_KEY", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ Required, SqlColumnNumber = 2, SqlFieldName = L_KEY ];
+
+Property LLASTCHANGEDBY As %String(EXTERNALSQLNAME = "L_LASTCHANGEDBY", EXTERNALSQLTYPE = 12, MAXLEN = 40) [ SqlColumnNumber = 9, SqlFieldName = L_LASTCHANGEDBY ];
+
+Property LLENGTH As %Numeric(EXTERNALSQLNAME = "L_LENGTH", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 15, SqlFieldName = L_LENGTH ];
+
+Property LLOCKED As %String(EXTERNALSQLNAME = "L_LOCKED", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 14, SqlFieldName = L_LOCKED ];
+
+Property LPKEY As %Numeric(EXTERNALSQLNAME = "L_P_KEY", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 3, SqlFieldName = L_P_KEY ];
+
+Property LPRELIMINARY As %Float(EXTERNALSQLNAME = "L_PRELIMINARY", EXTERNALSQLTYPE = 6) [ SqlColumnNumber = 18, SqlFieldName = L_PRELIMINARY ];
+
+Property LSERVICE As %Numeric(EXTERNALSQLNAME = "L_SERVICE", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 4, SqlFieldName = L_SERVICE ];
+
+Property LTEMPLATE As %String(EXTERNALSQLNAME = "L_TEMPLATE", EXTERNALSQLTYPE = 12, MAXLEN = 10) [ SqlColumnNumber = 10, SqlFieldName = L_TEMPLATE ];
+
+Property LTEMPLATEKEY As %Numeric(EXTERNALSQLNAME = "L_TEMPLATEKEY", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 17, SqlFieldName = L_TEMPLATEKEY ];
+
+Property LTEXT As %Stream.GlobalBinary(CLASSNAME = 2, EXTERNALSQLNAME = "L_TEXT", EXTERNALSQLTYPE = -4) [ SqlColumnNumber = 16, SqlFieldName = L_TEXT ];
+
+Property LUSEDAS As %Numeric(EXTERNALSQLNAME = "L_USEDAS", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 11, SqlFieldName = L_USEDAS ];
+
+Property LVALIDATED As %String(EXTERNALSQLNAME = "L_VALIDATED", EXTERNALSQLTYPE = 12, MAXLEN = 1) [ SqlColumnNumber = 13, SqlFieldName = L_VALIDATED ];
+
+Property LWRITTENBY As %String(EXTERNALSQLNAME = "L_WRITTENBY", EXTERNALSQLTYPE = 12, MAXLEN = 10) [ SqlColumnNumber = 7, SqlFieldName = L_WRITTENBY ];
+
+Property LWRITTENFOR As %Numeric(EXTERNALSQLNAME = "L_WRITTENFOR", EXTERNALSQLTYPE = 3, MAXVAL = 9999999999, MINVAL = -9999999999, SCALE = 0) [ SqlColumnNumber = 5, SqlFieldName = L_WRITTENFOR ];
+
+Index MainIndex On LKEY [ IdKey, PrimaryKey ];
+
+Parameter CONNECTION = "QDOC2,NOCREATE";
+
+Parameter EXTDBNAME = "Oracle";
+
+Parameter EXTERNALTABLENAME = "SYSADM.REPORT_BODY";
+
+Storage GSQLStorage
+{
+<ExtentSize>100000</ExtentSize>
+<StreamLocation>^CHUBXL.DB.QDOC2.REPORTBODYS</StreamLocation>
+<Type>%CacheSQLStorage</Type>
+}
+
+}

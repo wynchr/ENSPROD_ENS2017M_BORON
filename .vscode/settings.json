@@ -1,0 +1,7 @@
+{
+    "objectscript.conn": {
+        "server": "ens2017m~boron",
+        "ns": "ENSPROD",
+        "active": true
+    }
+}
