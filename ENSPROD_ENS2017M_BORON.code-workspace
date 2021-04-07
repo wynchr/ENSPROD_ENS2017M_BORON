@@ -1,0 +1,38 @@
+{
+	"folders": [
+	  {
+		"path": "D:\\DEV\\INTERSYSTEMS\\ENSEMBLE\\ENSPROD_ENS2017M_BORON"
+	  },
+		{
+			"name": "ens2017m~boron:ENSPROD",
+			"uri": "isfs://ens2017m~boron:ensprod/"
+		},
+		{
+			"name": "ens2017m~boron:ENSPROD web files",
+			"uri": "isfs://ens2017m~boron:ensprod/?csp"
+		},
+		{
+			"name": "ENS2017M",
+			"path": "\\\\boron.chu-brugmann.be\\i$\\ENS2017M",
+		},
+		{
+			"name": "DATA PROD",
+			"path": "\\\\boron.chu-brugmann.be\\g$\\PROD"
+		}	  
+	],
+	"settings": {
+		"workbench.colorTheme": "Cobalt3",
+		"workbench.colorCustomizations": {
+			"titleBar.activeForeground": "#e2eaee",
+			"titleBar.inactiveForeground": "#e2eaee",
+			"titleBar.activeBackground": "#ff0000",
+			"titleBar.inactiveBackground": "#bb6060"
+		  }
+		"objectscript.export": {
+			"folder": "src",
+ 		   	"addCategory": true,
+			"category": "CLS",
+			"dontExportIfNoChanges": true
+		   }		
+	}
+  }

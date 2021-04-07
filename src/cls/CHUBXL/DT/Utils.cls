@@ -1,7 +1,7 @@
 Class CHUBXL.DT.Utils Extends %RegisteredObject [ ClassType = "", ProcedureBlock ]
 {
 
-/// Renvoie le SendingApplication pour Dbmotion
+/// Renvoie le SendingApplication pour Dbmotion 
 ClassMethod getSendingApplicationFromNHop(pNHop As %String = "") As %String
 {
 	q $Case(+(pNHop),25:"HSP_ADT_SNI",26:"HBR_ADT_SNI",27:"HUD_ADT_SNI",31:"BOR_ADT_SNI",10:"HIS_ADT_SNI",:"Other_ADT_SNI")
