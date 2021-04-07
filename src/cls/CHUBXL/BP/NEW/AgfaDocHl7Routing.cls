@@ -11,6 +11,8 @@ VERSION
 -------
 CWY	24/07/2018	Initial Version
 CWY	31/07/2018	Add comment
+DAM	28/09/2020	Add PacsOnWeb HUDERF
+DAM	10/03/2021	Add PacsOnWeb Brugmann
 
 REQUEST
 -------
@@ -74,10 +76,10 @@ Method OnRequest(pRequest As CHUBXL.DATA.RawMessageStream, Output pResponse As E
 	$$$TRACE("TargetConfigName : "_tTargetConfigName)
 	s Instance=$p($SYSTEM,":",2)
 	
-	if (tSourceConfigName = "AgfaBruDocHl7TcpIn") ! (tSourceConfigName = "AgfaBruDocHl7TcpInNew" ) {
+	if (tSourceConfigName = "AgfaBruDocHl7TcpIn") ! (tSourceConfigName = "AgfaBruDocHl7TcpInNew") {
 	   s NHop=26
 	}
-	if tSourceConfigName = "AgfaHudDocHl7TcpIn" {
+	if (tSourceConfigName = "AgfaHudDocHl7TcpIn") ! (tSourceConfigName = "AgfaHudDocHl7TcpInNew") {
 	   s NHop=27
 	}
 
@@ -85,7 +87,7 @@ Method OnRequest(pRequest As CHUBXL.DATA.RawMessageStream, Output pResponse As E
 	// Test Source
 	//------------------------------
 
-	If (tSourceConfigName = "AgfaBruDocHl7TcpIn" ) ! (tSourceConfigName = "AgfaHudDocHl7TcpIn" )  ! (tSourceConfigName = "AgfaBruDocHl7TcpInNew" ) {
+	If (tSourceConfigName = "AgfaBruDocHl7TcpIn" ) ! (tSourceConfigName = "AgfaHudDocHl7TcpIn" ) ! (tSourceConfigName = "AgfaBruDocHl7TcpInNew" ) ! (tSourceConfigName = "AgfaHudDocHl7TcpInNew" ) ! (tSourceConfigName = "AgfaAllDocHl7FcpIn" ) {
 
 		i (tSourceConfigName '= "AgfaeiBruDocHl7TcpIn") & (tSourceConfigName '= "AgfaBruDocHl7TcpIn") & (tSourceConfigName '= "AgfaHudDocHl7TcpIn") {
 		  d pRequest.payLoad.Rewind()
@@ -109,8 +111,9 @@ Method OnRequest(pRequest As CHUBXL.DATA.RawMessageStream, Output pResponse As E
 		}
 		
 		s HL7File.HL7.DocType="2.6:"_$p(HL7File.HL7.Name,"_",1,2)
-		if tSourceConfigName = "AgfaBruDocHl7TcpIn" {
+		if (tSourceConfigName = "AgfaBruDocHl7TcpIn") ! (tSourceConfigName = "AgfaBruDocHl7FcpIn") {
 	       s:Instance="ENS2017M" tSC = ..SendRequestAsync("AgfaBdocBruDocHl7TcpFwdPrep",HL7File.HL7)  Quit:$$$ISERR(tSC) tSC
+   	       s:Instance="ENS2017M" tSC = ..SendRequestAsync("AgfaPacsOnWebBruDocHl7TcpOut",pRequest)  Quit:$$$ISERR(tSC) tSC
 	    }
 	    if tSourceConfigName = "AgfaHudDocHl7TcpIn" {
 	       s:Instance="ENS2017M" tSC = ..SendRequestAsync("AgfaBdocHudDocHl7TcpFwdPrep",HL7File.HL7)  Quit:$$$ISERR(tSC) tSC
@@ -147,19 +150,32 @@ Method OnRequest(pRequest As CHUBXL.DATA.RawMessageStream, Output pResponse As E
 	//------------------------------
 	// Send to BO
 	//------------------------------
+		if (tSourceConfigName = "AgfaAllDocHl7FcpIn" ) {
+		   $$$TRACE("Message : "_HL7File.HL7.GetValueAt("PIDgrpgrp(1).PIDgrp.PID",,.tSC))
+	       s NHop=HL7File.HL7.GetValueAt("PIDgrpgrp(1).PIDgrp.PID:PatientID.IDNumber",,.tSC)
+	       i $e(NHop,1)=8 s NHop=27
+	       i $l(NHop)>8 s NHop=26
+	       $$$TRACE("***************************************************"_NHop)
+		}
 		
-		$$$TRACE("NHop : "_NHop)
+		$$$TRACE("NHop : *"_NHop)
 		
 		if NHop=26 {
 		   s:Instance="ENS2017M" tSC = ..SendRequestAsync("AgfaBdocBruDocHl7FcpOut",HL7File)  Quit:$$$ISERR(tSC) tSC
-		   s:Instance="ENS2017PREP" tSC = ..SendRequestAsync("AgfaBdocBruDocHl7FcpFwd",HL7File)  Quit:$$$ISERR(tSC) tSC
+		   i Instance="ENS2017PREP" {
+			 s tSC = ..SendRequestAsync("AgfaBdocBruDocHl7FcpFwd",HL7File)  Quit:$$$ISERR(tSC) tSC
+			 i +$g(^CHUBXL.Parameter("Bdoc","Acceptance1901")) s tSC = ..SendRequestAsync("AgfaNewBdocBruDocHl7FcpFwd",HL7File)  Quit:$$$ISERR(tSC) tSC
+		   }
 		   $$$TRACE("Pos : **"_NewPos_"**")
 		   $$$TRACE("Msg sent to DPI Brugmann")
 		}
 		
 		if NHop=27 {
 		   s:Instance="ENS2017M" tSC = ..SendRequestAsync("AgfaBdocHudDocHl7FcpOut",HL7File)  Quit:$$$ISERR(tSC) tSC
-		   s:Instance="ENS2017PREP" tSC = ..SendRequestAsync("AgfaBdocHudDocHl7FcpFwd",HL7File)  Quit:$$$ISERR(tSC) tSC
+		   i Instance="ENS2017PREP" {
+			 s tSC = ..SendRequestAsync("AgfaBdocHudDocHl7FcpFwd",HL7File)  Quit:$$$ISERR(tSC) tSC
+			 i +$g(^CHUBXL.Parameter("Bdoc","Acceptance1901")) s tSC = ..SendRequestAsync("AgfaNewBdocHudDocHl7FcpFwd",HL7File)  Quit:$$$ISERR(tSC) tSC
+		   }
 		   $$$TRACE("Pos : **"_NewPos_"**")
 		   $$$TRACE("Msg sent to DPI HUDERF")
 		}

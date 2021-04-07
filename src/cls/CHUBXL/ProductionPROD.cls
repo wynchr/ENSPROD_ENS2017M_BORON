@@ -14,6 +14,7 @@ CWY	01/08/2018	Add comment
 CWY	02/08/2018	Put NEW Class
 DAM	15/02/2021	Add Cosite connexion
 DAM	02/03/2021	Add stérilisation connexion
+CWY 06/04/2021  Add IR4HTEST Dup channel
 
 APPLICATIONS
 ------------
@@ -166,6 +167,8 @@ WishMososBruAdtHl7TcpOut 			A-Wish,A-Mosos,T-ADT							CHUBXL.BO.NEW.HL7TcpOut		
 WishDatamealBruAdtHl7TcpOut 		A-Wish,A-Datameal,T-ADT							CHUBXL.BO.NEW.HL7TcpOut								Envoi des données administratives des patients de Wish vers Datameal
 WishInfopartnerAllAdtHl7TcpOut 		A-Wish,A-Infopartner,T-ADT						CHUBXL.BO.NEW.HL7TcpOut								Envoi des données administratives des patients de Wish vers Datameal
 WishEnsTestAllAdtHl7TcpOut 			A-Wish											CHUBXL.BO.NEW.HL7TcpOut								Transmission des données Administratives vers l&apos;environnement de test Ensemble
+WishEnsTestIR4HAllAdtHl7TcpOut 			A-Wish											CHUBXL.BO.NEW.HL7TcpOut								Transmission des données Administratives vers l&apos;environnement de test IR4HTEST
+
 WishEnsPrepAllAdtHl7TcpOut 			A-Wish											CHUBXL.BO.NEW.HL7TcpOut								Transmission des données Administratives vers l&apos;environnement de pré-production Ensemble
 WishBdocHudAdtHl7TcpOut 			A-Wish,A-Bdoc,A-Refmed,A-Medecin,T-ADT			CHUBXL.BO.NEW.HL7TcpOut								Envoi des données administratives des patients de Wish vers le DPI (Bdoc)
 WishOphtalmoHudAdtHl7TcpOut 		A-Wish,A-Ophtalmo,T-ADT							CHUBXL.BO.NEW.HL7TcpOut								Envoi des données administratives des patients de Wish vers l&apos;ophtalmo
@@ -370,7 +373,7 @@ OPHTALMO
 --------
 OphtalmoHudDocRouting 				A-Ophtalmo,A-Mv,T-DOC							CHUBXL.BP.NEW.OphtalmoRouting						Routage des résultats Ophtalmo vers Medical Viewer
 OphtalmoHudDocHl7FcpIn 				A-Ophtalmo,T-DOC								CHUBXL.BS.NEW.OphtalmoFile							Reception des rapports d&apos;Ophtalmologie pour l&apos;HUDERF
-OphtalmoMvHudDocHl7FcpOut 			A-Ophtalmo,A-Mv,T-DOC							CHUBXL.BO.NEW.SendDocToMv							Transmission des rapports d&apos;ophtalmologie vers Medical Viewer
+OphtalmoMvAllDocHl7FcpOut 			A-Ophtalmo,A-Mv,T-DOC							CHUBXL.BO.NEW.SendDocToMv							Transmission des rapports d&apos;ophtalmologie vers Medical Viewer
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ENDOBASE
 --------
@@ -409,14 +412,14 @@ XData ProductionDefinition
 <Production Name="CHUBXL.ProductionPROD" TestingEnabled="false" LogGeneralTraceEvents="false">
   <Description>Production CHUBXL de PRODUCTION - BORON</Description>
   <ActorPoolSize>2</ActorPoolSize>
-  <Item Name="CHUBXLGeneralMetric" Category="S-Metric,S-Alert" ClassName="CHUBXL.MET.GeneralMetric" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="CHUBXLGeneralMetric" Category="2.URBA-ON,1.MON-ON,S-Metric,S-Alert" ClassName="CHUBXL.MET.GeneralMetric" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertGracePeriod">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="AlertEmail" Category="S-Alert" ClassName="EnsLib.EMail.AlertOperation" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Gestion des alertes par E-mail" LogTraceEvents="false" Schedule="">
+  <Item Name="AlertEmail" Category="2.URBA-ON,1.MON-ON,S-Alert" ClassName="EnsLib.EMail.AlertOperation" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Gestion des alertes par E-mail" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
     <Setting Target="Host" Name="RetryInterval">5</Setting>
@@ -431,29 +434,29 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Cc"></Setting>
     <Setting Target="Adapter" Name="From">ensembleBoronPROD@chu-brugmann.be</Setting>
   </Item>
-  <Item Name="Ens.Alert" Category="S-Alert" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="Ens.Alert" Category="2.URBA-ON,1.MON-ON,S-Alert" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="BusinessRuleName">CHUBXL.Ens.Alert</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="ActivityChecker" Category="S-Alert" ClassName="Ciges.BS.ActivityChecker" PoolSize="1" Enabled="true" Foreground="false" Comment="Service de vérification de l&apos;état des connecteurs afin de voir s&apos;ils sont actifs" LogTraceEvents="false" Schedule="">
+  <Item Name="ActivityChecker" Category="2.URBA-ON,1.MON-ON,S-Alert" ClassName="Ciges.BS.ActivityChecker" PoolSize="1" Enabled="true" Foreground="false" Comment="Service de vérification de l&apos;état des connecteurs afin de voir s&apos;ils sont actifs" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="ActivityCheckerAlertRegulator" Category="S-Alert" ClassName="Ciges.BP.AlertRegulator" PoolSize="1" Enabled="true" Foreground="false" Comment="Régulation des alertes envoyées par l&apos;ActivityChecker pour ne pas envoyer trop de mails" LogTraceEvents="false" Schedule="">
+  <Item Name="ActivityCheckerAlertRegulator" Category="2.URBA-ON,1.MON-ON,S-Alert" ClassName="Ciges.BP.AlertRegulator" PoolSize="1" Enabled="true" Foreground="false" Comment="Régulation des alertes envoyées par l&apos;ActivityChecker pour ne pas envoyer trop de mails" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="target">ActivityCheckerAlert</Setting>
     <Setting Target="Host" Name="sendInterval">60</Setting>
     <Setting Target="Host" Name="activityCheckerConfigName">Ens.Alert</Setting>
   </Item>
-  <Item Name="ActivityCheckerAlert" Category="S-Alert" ClassName="Ciges.BO.AlertSender" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="ActivityCheckerAlert" Category="2.URBA-ON,1.MON-ON,S-Alert" ClassName="Ciges.BO.AlertSender" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="From">ProductionEnsemble@Brugmann.be</Setting>
     <Setting Target="Adapter" Name="Recipient">dulio.ambrogetti@chu-brugmann.be</Setting>
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp.chu-brugmann.be</Setting>
   </Item>
-  <Item Name="WishAllAdtRouting" Category="A-Wish,T-ADT" ClassName="CHUBXL.BP.NEW.WishAdtHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routing des messsages de données administratives des patients (Wish)" LogTraceEvents="false" Schedule="">
+  <Item Name="WishAllAdtRouting" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADT" ClassName="CHUBXL.BP.NEW.WishAdtHl7Routing" PoolSize="1" Enabled="true" Foreground="true" Comment="Routing des messsages de données administratives des patients (Wish)" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="AddToMetric">1</Setting>
   </Item>
-  <Item Name="WishBruAdtHl7TcpIn" Category="A-Wish,T-ADT,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des messages de données administratives des patients Brugmann." LogTraceEvents="false" Schedule="">
+  <Item Name="WishBruAdtHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des messages de données administratives des patients Brugmann." LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="TargetConfigNames">WishAllAdtRouting</Setting>
     <Setting Target="Adapter" Name="Port">21461</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\archive\Bru</Setting>
@@ -470,7 +473,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="PreACKTCPClear">0</Setting>
     <Setting Target="Adapter" Name="ReadTimeout">0</Setting>
   </Item>
-  <Item Name="WishHudAdtHl7TcpIn" Category="A-Wish,T-ADT,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des messages de données administratives des patients de l&apos;HUDERF." LogTraceEvents="false" Schedule="">
+  <Item Name="WishHudAdtHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des messages de données administratives des patients de l&apos;HUDERF." LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="TargetConfigNames">WishAllAdtRouting</Setting>
     <Setting Target="Adapter" Name="Port">21471</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\archive\Hud</Setting>
@@ -486,7 +489,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="Framing">MLLP</Setting>
     <Setting Target="Host" Name="PreACKTCPClear">0</Setting>
   </Item>
-  <Item Name="WishAllAdtHl7FcpIn" Category="A-Wish" ClassName="CHUBXL.BS.NEW.WishHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Ré envoie des messages HL7 de Wish" LogTraceEvents="false" Schedule="">
+  <Item Name="WishAllAdtHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Wish" ClassName="CHUBXL.BS.NEW.WishHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Ré envoie des messages HL7 de Wish" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Wish\archive\All</Setting>
     <Setting Target="Adapter" Name="FilePath">G:\PROD\Wish\in</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
@@ -497,7 +500,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
   </Item>
-  <Item Name="WishBruMedHl7TcpIn" Category="A-Wish,A-Medecin,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Réception des messages de données médecins Wish Brugmann." LogTraceEvents="false" Schedule="">
+  <Item Name="WishBruMedHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Medecin" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Réception des messages de données médecins Wish Brugmann." LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="TargetConfigNames">MedecinAllMedRouting</Setting>
     <Setting Target="Adapter" Name="Port">21131</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\Medecin\archive\Bru</Setting>
@@ -513,7 +516,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="PreACKTCPClear">0</Setting>
     <Setting Target="Host" Name="Framing">MLLP</Setting>
   </Item>
-  <Item Name="WishHudMedHl7TcpIn" Category="A-Wish,A-Medecin,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Réception des messages de données médecins Wish H.U.D.E.R.F." LogTraceEvents="false" Schedule="">
+  <Item Name="WishHudMedHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Medecin" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Réception des messages de données médecins Wish H.U.D.E.R.F." LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="MessageSchemaCategory">2.5</Setting>
     <Setting Target="Host" Name="TargetConfigNames">MedecinAllMedRouting</Setting>
     <Setting Target="Adapter" Name="Port">21141</Setting>
@@ -528,7 +531,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="PreACKTCPClear">0</Setting>
     <Setting Target="Host" Name="Framing">MLLP</Setting>
   </Item>
-  <Item Name="WishAgfaHudAdtHl7TcpOut" Category="A-Wish,A-Agfa,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives patients de Wish vers Agfa-Quadrat HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="WishAgfaHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Agfa,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives patients de Wish vers Agfa-Quadrat HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Agfa\Hud</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\Agfa\Hud</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
@@ -538,7 +541,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishDialyseAllAdtXmlTcpOut" Category="A-Wish,A-Dialyse,T-ADT" ClassName="CHUBXL.BO.NEW.ParsedTcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des données Administratives vers le logiciel de dialyses (hemadial)" LogTraceEvents="false" Schedule="">
+  <Item Name="WishDialyseAllAdtXmlTcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Dialyse,T-ADT" ClassName="CHUBXL.BO.NEW.ParsedTcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des données Administratives vers le logiciel de dialyses (hemadial)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Wish</Setting>
@@ -564,7 +567,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">30</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishIcipHudAdtHl7TcpOut" Category="A-Wish,A-Icip,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives le logiciel des USI (ICIP) de l&apos;HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="WishIcipHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Icip,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives le logiciel des USI (ICIP) de l&apos;HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Icip\Hud</Setting>
@@ -590,7 +593,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishInnovianHudAdtHl7TcpOut" Category="A-Wish,A-Innovian,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers le logiciel de gestion du département d&apos;anésthésie (Innovian) de l&apos;HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="WishInnovianHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Innovian,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers le logiciel de gestion du département d&apos;anésthésie (Innovian) de l&apos;HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Innovian\Hud</Setting>
@@ -616,7 +619,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishNewInnovianHudAdtHl7TcpOut" Category="A-Wish,A-Innovian,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers le logiciel de gestion du département d&apos;anésthésie (Innovian) de l&apos;HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="WishNewInnovianHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Innovian,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers le logiciel de gestion du département d&apos;anésthésie (Innovian) de l&apos;HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\NewInnovian\Hud</Setting>
@@ -642,7 +645,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishCacheAllAdtHl7FcpOut" Category="A-Wish,A-Cache,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
+  <Item Name="WishCacheAllAdtHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Cache,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -660,7 +663,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteHL7">\\brdevtask1\FTPincoming$\Wish</Setting>
     <Setting Target="Host" Name="RPFileHL7"></Setting>
   </Item>
-  <Item Name="WishConnexBruAdtHl7TcpOut" Category="A-Wish,T-ADT,A-Connex,A-ParamConnect" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
+  <Item Name="WishConnexBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-OFF,A-Wish,T-ADT,A-Connex,A-ParamConnect" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Connex\Bru</Setting>
@@ -686,7 +689,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishMobitraceBruAdtHl7TcpOut" Category="A-Wish,T-ADT,A-ParamConnect,A-MobiTrace" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers MobiTrace" LogTraceEvents="false" Schedule="">
+  <Item Name="WishMobitraceBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADT,A-ParamConnect,A-MobiTrace" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers MobiTrace" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Mobitrace\Bru</Setting>
@@ -712,7 +715,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishMvAllAdtHl7TcpOut" Category="A-Wish,A-Mv,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="WishMvAllAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Mv,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Mv\All</Setting>
@@ -738,7 +741,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishOxygenBruAdtHl7TcpOut" Category="A-Wish,A-Oxygen,A-Refmed,A-Medecin,T-ADT,T-GDR" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers la Kine" LogTraceEvents="false" Schedule="">
+  <Item Name="WishOxygenBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Oxygen,A-Refmed,A-Medecin,T-ADT,T-GDR" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers la Kine" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Oxygen\Bru</Setting>
@@ -764,7 +767,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishAgfaBruAdtHl7TcpOut" Category="A-Wish,A-Agfa,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives patients de Wish vers Agfa-Quadrat Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="WishAgfaBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Agfa,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives patients de Wish vers Agfa-Quadrat Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">brRisIN02</Setting>
     <Setting Target="Adapter" Name="Port">21641</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Agfa\Bru</Setting>
@@ -775,7 +778,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="Framing">MLLP</Setting>
   </Item>
-  <Item Name="WishAgfaeiBruAdtHl7TcpOut" Category="A-Wish,A-Agfa,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives patients de Wish vers Agfa-Quadrat Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="WishAgfaeiBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Agfa,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives patients de Wish vers Agfa-Quadrat Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.10.127</Setting>
     <Setting Target="Adapter" Name="Port">21132</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Agfaei\Bru</Setting>
@@ -785,7 +788,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
   </Item>
-  <Item Name="WishGlimsBruAdtHl7TcpOut" Category="A-Wish,A-Glims,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives de Wish Brugmann vers Glims" LogTraceEvents="false" Schedule="">
+  <Item Name="WishGlimsBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Glims,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives de Wish Brugmann vers Glims" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21253</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Glims\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\Glims\Bru</Setting>
@@ -794,7 +797,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
   </Item>
-  <Item Name="WishGlimsHudAdtHl7TcpOut" Category="A-Wish,A-Glims,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives de Wish Brugmann vers Glims" LogTraceEvents="false" Schedule="">
+  <Item Name="WishGlimsHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Glims,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives de Wish Brugmann vers Glims" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21252</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Glims\Hud</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\Glims\Hud</Setting>
@@ -802,7 +805,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="IPAddress">10.60.2.11</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishDiamicAllAdtHl7TcpOut" Category="A-Wish,A-Diamic,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données adminstratives des aptiens de Wish vers Diamic" LogTraceEvents="false" Schedule="">
+  <Item Name="WishDiamicAllAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Diamic,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données adminstratives des aptiens de Wish vers Diamic" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Diamic\All</Setting>
@@ -828,7 +831,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishInfohosAllAdtHl7TcpOut" Category="A-Wish,A-Infohos,T-ADT,A-Medecin" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Infohos" LogTraceEvents="false" Schedule="">
+  <Item Name="WishInfohosAllAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Infohos,T-ADT,A-Medecin" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Infohos" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Infohos\All</Setting>
@@ -854,7 +857,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishAstraiaBruAdtHl7TcpOut" Category="A-Wish,A-Astraia,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="WishAstraiaBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Astraia,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Astraia\Bru</Setting>
@@ -881,7 +884,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\Astraia\Bru</Setting>
   </Item>
-  <Item Name="WishEcareBruAdtHl7TcpOut" Category="A-Wish,A-Ecare,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="WishEcareBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Ecare,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Ecare\Bru</Setting>
@@ -907,7 +910,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishEcareHudAdtHl7TcpOut" Category="A-Wish,A-Ecare,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="WishEcareHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Ecare,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Ecare\Hud</Setting>
@@ -933,7 +936,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishMososBruAdtHl7TcpOut" Category="A-Wish,A-Mosos,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données administratives WIsh vers le logiciel de gynécologie (Mosos)" LogTraceEvents="false" Schedule="">
+  <Item Name="WishMososBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Mosos,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données administratives WIsh vers le logiciel de gynécologie (Mosos)" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">22116</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Mosos\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\Mosos\Bru</Setting>
@@ -941,7 +944,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="IPAddress">10.20.8.72</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishDatamealBruAdtHl7TcpOut" Category="A-Wish,A-Datameal,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
+  <Item Name="WishDatamealBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Datameal,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Datameal\Bru</Setting>
@@ -967,7 +970,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">15</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishEnsTestAllAdtHl7TcpOut" Category="A-Wish" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers l&apos;environnement de Pre-Production" LogTraceEvents="false" Schedule="">
+  <Item Name="WishEnsTestAllAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers l&apos;environnement de Pre-Production" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.8.239</Setting>
     <Setting Target="Adapter" Name="Port">21232</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\EnsTest\All</Setting>
@@ -978,7 +981,18 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishBdocHudAdtHl7TcpOut" Category="A-Wish,A-Bdoc,A-Refmed,A-Medecin,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers le DPI (Bdoc)" LogTraceEvents="false" Schedule="">
+  <Item Name="WishEnsTestIR4HAllAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers l&apos;environnement de Pre-Production" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="IPAddress">brEsbTEST</Setting>
+    <Setting Target="Adapter" Name="Port">21232</Setting>
+    <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\EnsTestIR4H\All</Setting>
+    <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\EnsTestIR4H\All</Setting>
+    <Setting Target="Adapter" Name="ConnectTimeout">30</Setting>
+    <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
+    <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
+    <Setting Target="Host" Name="RetryInterval">60</Setting>
+    <Setting Target="Host" Name="ArchiveIO">0</Setting>
+  </Item>
+  <Item Name="WishBdocHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Bdoc,A-Refmed,A-Medecin,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers le DPI (Bdoc)" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21771</Setting>
     <Setting Target="Adapter" Name="IPAddress">ATAIR</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Bdoc\Hud</Setting>
@@ -987,7 +1001,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishOphtalmoHudAdtHl7TcpOut" Category="A-Wish,A-Ophtalmo,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers l&apos;ophtalmo" LogTraceEvents="false" Schedule="">
+  <Item Name="WishOphtalmoHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Ophtalmo,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers l&apos;ophtalmo" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">ruthenium</Setting>
     <Setting Target="Adapter" Name="Port">21501</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Ophtalmo\Hud</Setting>
@@ -997,7 +1011,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaOphtalmoBruRdvHl7Tcp" Category="A-Bdoc,A-Agfa,T-RDV,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner Brugmann vers le Softalmo" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaOphtalmoBruRdvHl7Tcp" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner Brugmann vers le Softalmo" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaRV\out\Ophtalmo\Bru</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">G:\PROD\AgfaRV\out\Ophtalmo\Bru</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -1006,7 +1020,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishBdocBruAdtHl7TcpOut" Category="A-Wish,A-Bdoc,A-Refmed,A-Medecin,T-ADT,T-GDR" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers le DPI (Bdoc)" LogTraceEvents="false" Schedule="">
+  <Item Name="WishBdocBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Bdoc,A-Refmed,A-Medecin,T-ADT,T-GDR" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers le DPI (Bdoc)" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21951</Setting>
     <Setting Target="Adapter" Name="IPAddress">SPICA</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Bdoc\Bru</Setting>
@@ -1015,7 +1029,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishGlimsCyberlabAllAdtHl7TcpOut" Category="A-Wish,A-Glims,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives de Wish Brugmann vers Glims CyberLab" LogTraceEvents="false" Schedule="">
+  <Item Name="WishGlimsCyberlabAllAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Glims,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives de Wish Brugmann vers Glims CyberLab" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21631</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Glims\CyberLab\All</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\Glims\CyberLab\All</Setting>
@@ -1023,13 +1037,13 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="IPAddress">10.10.8.43</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishBrainRtHudAdtHl7TcpOut" Category="A-Wish,A-BrainRt,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Adt Wish vers Brainrt (labo sommeil Huderf)" LogTraceEvents="false" Schedule="">
+  <Item Name="WishBrainRtHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-BrainRt,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Adt Wish vers Brainrt (labo sommeil Huderf)" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">huBrainRT</Setting>
     <Setting Target="Adapter" Name="Port">21121</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\BrainRT\Hud</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\BrainRT\Hud</Setting>
   </Item>
-  <Item Name="WishOperaBruAdtHl7TcpOut" Category="A-Wish,A-Opera,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données adminsitratives patient de Wish vers Opera" LogTraceEvents="false" Schedule="">
+  <Item Name="WishOperaBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Opera,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données adminsitratives patient de Wish vers Opera" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">BROPERAINT01</Setting>
     <Setting Target="Adapter" Name="Port">21591</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
@@ -1039,7 +1053,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishAgfaNewBruAdtHl7TcpOut" Category="A-Wish,A-Agfa,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives patients de Wish vers Agfa-Quadrat Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="WishAgfaNewBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Agfa,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des données administratives patients de Wish vers Agfa-Quadrat Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">brRisIN01</Setting>
     <Setting Target="Adapter" Name="Port">21651</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\NewAgfa\Bru</Setting>
@@ -1049,16 +1063,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
   </Item>
-  <Item Name="WishBdocPrepHudAdtHl7TcpOut" Category="A-Wish,A-Bdoc,T-ADT,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers le DPI (Bdoc)" LogTraceEvents="false" Schedule="">
-    <Setting Target="Adapter" Name="Port">21721</Setting>
-    <Setting Target="Adapter" Name="IPAddress">10.20.8.26</Setting>
-    <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Bdoc\Hud</Setting>
-    <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\Bdoc\Hud</Setting>
-    <Setting Target="Host" Name="RetryInterval">60</Setting>
-    <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
-    <Setting Target="Host" Name="ArchiveIO">0</Setting>
-  </Item>
-  <Item Name="WishCacheAllMedHl7FcpOut" Category="A-Wish,A-Ciges,A-Medecin,A-Cache" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
+  <Item Name="WishCacheAllMedHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Ciges,A-Medecin,A-Cache" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -1076,7 +1081,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteHL7">\\brdevtask1\FTPincoming$\WishMFN</Setting>
     <Setting Target="Host" Name="RPFileHL7"></Setting>
   </Item>
-  <Item Name="WishEcareBruMedHl7FcpOut" Category="A-Medecin,A-Ecare" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données médecin vers Ecare" LogTraceEvents="false" Schedule="">
+  <Item Name="WishEcareBruMedHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Medecin,A-Ecare" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données médecin vers Ecare" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Medecin</Setting>
@@ -1095,19 +1100,19 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="BdocAllDocRouting" Category="A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.BdocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des rapports de Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.BdocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des rapports de Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="BdocAllHcRouting" Category="A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BP.NEW.BdocHcRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des résultats Bdoc vers MediBridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocAllHcRouting" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BP.NEW.BdocHcRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des résultats Bdoc vers MediBridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="HCUMRouting" Category="A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BP.NEW.HCUMRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des résultats Bdoc vers MediBridge" LogTraceEvents="false" Schedule="">
+  <Item Name="HCUMRouting" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BP.NEW.HCUMRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des résultats Bdoc vers MediBridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="BdocHudDocHl7FcpIn" Category="A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.BdocHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.BdocHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de Bdoc HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Bdoc\archive\Hud</Setting>
@@ -1123,7 +1128,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocBruDocHl7FcpIn" Category="A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.BdocHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de Bdoc BRU" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.BdocHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de Bdoc BRU" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\BDoc\archive\Bru</Setting>
@@ -1139,7 +1144,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocMvAllDocHl7FcpOut" Category="A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapports de Bdoc) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocMvAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapports de Bdoc) vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Bdoc</Setting>
@@ -1158,7 +1163,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteHL7">\\Sharatan\ACScanImport$\BDoc\Hude</Setting>
     <Setting Target="Host" Name="RPFileHL7">\\Sharatan\ACScanImport$\BDoc\Hude</Setting>
   </Item>
-  <Item Name="OphtBruHCUMMedidocFcpIn" Category="A-Opth,A-HealthConnect" ClassName="CHUBXL.BS.NEW.OphtHCUMFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="OphtBruHCUMMedidocFcpIn" Category="2.URBA-ON,1.MON-ON,A-Ophtalmo,A-HealthConnect" ClassName="CHUBXL.BS.NEW.OphtHCUMFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Bru</Setting>
@@ -1174,7 +1179,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocBruHcHealthoneFcpIn" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocBruHcHealthoneFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Bru</Setting>
@@ -1190,7 +1195,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocBruHcMedidocFcpIn" Category="A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocBruHcMedidocFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Bru</Setting>
@@ -1206,7 +1211,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocBruHcMedimailFcpIn" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocBruHcMedimailFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Bru</Setting>
@@ -1222,7 +1227,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocBruHcSocrateFcpIn" Category="A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocBruHcSocrateFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Bru</Setting>
@@ -1238,7 +1243,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocBruHcTexteFcpIn" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocBruHcTexteFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Bru</Setting>
@@ -1254,7 +1259,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="OphtBruHCUMMedidocFcpOut" Category="A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format BJP" LogTraceEvents="false" Schedule="">
+  <Item Name="OphtBruHCUMMedidocFcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format BJP" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1267,7 +1272,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="BdocAllHcHealthoneFcpOut" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format hone" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocAllHcHealthoneFcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format hone" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1280,7 +1285,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="BdocAllHcMedidocFcpOut" Category="A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format BJP" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocAllHcMedidocFcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format BJP" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1293,7 +1298,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="BdocAllHcMedimailFcpOut" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format Medar" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocAllHcMedimailFcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format Medar" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1306,7 +1311,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="BdocAllHcSocrateFcpOut" Category="A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format Medidoc" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocAllHcSocrateFcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format Medidoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1319,7 +1324,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="BdocAllHcTexteFcpOut" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format Medigest" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocAllHcTexteFcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de Bdoc vers MediBridge format Medigest" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1332,7 +1337,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="BdocHudHcHealthoneFcpIn" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudHcHealthoneFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Hud</Setting>
@@ -1348,7 +1353,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocHudHcMedidocFcpIn" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudHcMedidocFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Hud</Setting>
@@ -1364,7 +1369,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocHudHcMedimailFcpIn" Category="A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudHcMedimailFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Hud</Setting>
@@ -1380,7 +1385,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocHudHcSocrateFcpIn" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudHcSocrateFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Hud</Setting>
@@ -1396,7 +1401,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="BdocHudHcTexteFcpIn" Category="A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudHcTexteFcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.BdocHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Bdoc  pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\Hud</Setting>
@@ -1412,17 +1417,17 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="AgfaAllDocRouting" Category="A-Agfa,T-DOC" ClassName="CHUBXL.BP.NEW.AgfaDocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routing résultats Quadrat-Agfa HL7 ORU vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-DOC" ClassName="CHUBXL.BP.NEW.AgfaDocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routing résultats Quadrat-Agfa HL7 ORU vers DPI" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="AgfaAllImgRouting" Category="A-Agfa,T-IMG" ClassName="CHUBXL.BP.NEW.AgfaImgHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des informations pour l&apos;imagerie d&apos;Agfa vers Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaAllImgRouting" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-IMG" ClassName="CHUBXL.BP.NEW.AgfaImgHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des informations pour l&apos;imagerie d&apos;Agfa vers Bdoc" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="AgfaAllRdvRouting" Category="A-Agfa,T-RDV" ClassName="CHUBXL.BP.NEW.AgfaRdvHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Rendez-vous QPlanner vers DPIO" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaAllRdvRouting" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-RDV" ClassName="CHUBXL.BP.NEW.AgfaRdvHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Rendez-vous QPlanner vers DPIO" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="AgfaMvAllDocRouting" Category="A-Agfa,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.AgfaDocXmlRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des rapports de la radiologie et de QDReport" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaMvAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.AgfaDocXmlRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des rapports de la radiologie et de QDReport" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="AgfaBruDocHl7TcpIn" Category="A-Agfa,T-DOC,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats Quadrat-Agfa vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBruDocHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-DOC" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats Quadrat-Agfa vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21873</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaORU\archive\Bru</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
@@ -1430,7 +1435,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">AgfaAllDocRouting</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\AgfaORU\archive\Bru</Setting>
   </Item>
-  <Item Name="AgfaHudDocHl7TcpIn" Category="A-Agfa,T-DOC,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats Quadrat-Agfa vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaHudDocHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-DOC" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats Quadrat-Agfa vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21841</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaORU\archive\Hud</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
@@ -1438,7 +1443,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">AgfaAllDocRouting</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\AgfaORU\archive\Hud</Setting>
   </Item>
-  <Item Name="AgfaBruDocXmlTcpIn" Category="A-Agfa,A-Mv,T-DOC,MIT" ClassName="CHUBXL.BS.NEW.AgfaXmlTcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de radiologie et de QDReport pour Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBruDocXmlTcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.AgfaXmlTcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de radiologie et de QDReport pour Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AGFA\archive\Bru</Setting>
@@ -1464,7 +1469,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="AgfaHudDocXmlTcpIn" Category="A-Agfa,A-Mv,T-DOC,MIT" ClassName="CHUBXL.BS.NEW.AgfaXmlTcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de radiologie et de QDReport pour l&apos;HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaHudDocXmlTcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.AgfaXmlTcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de radiologie et de QDReport pour l&apos;HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Agfa\archive\Hud</Setting>
@@ -1489,7 +1494,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="AgfaBdocBruDocHl7FcpOut" Category="A-Agfa,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats HUDERF Quadrat vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats HUDERF Quadrat vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="SystemDestination">Bdoc</Setting>
     <Setting Target="Host" Name="SystemSource">Agfa</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\AgfaORU\out\Bdoc\Bru</Setting>
@@ -1501,7 +1506,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Adapter" Name="Overwrite">1</Setting>
   </Item>
-  <Item Name="AgfaBdocHudDocHl7FcpOut" Category="A-Agfa,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats HUDERF Quadrat vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats HUDERF Quadrat vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="SystemDestination">DPI</Setting>
     <Setting Target="Host" Name="SystemSource">Quadrat-Agfa</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\AgfaORU\out\Bdoc\Hud</Setting>
@@ -1513,7 +1518,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Adapter" Name="Overwrite">1</Setting>
   </Item>
-  <Item Name="AgfaBdocBruDocHl7TcpFwdPrep" Category="A-Agfa,A-Bdoc,T-IMG,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocBruDocHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Bdoc,T-IMG,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.8.238</Setting>
     <Setting Target="Adapter" Name="Port">21877</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -1522,7 +1527,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaBdocHudDocHl7TcpFwdPrep" Category="A-Agfa,A-Bdoc,T-IMG,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocHudDocHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Bdoc,T-IMG,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.8.238</Setting>
     <Setting Target="Adapter" Name="Port">21843</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -1531,7 +1536,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaMvAllDocXmlFcpOut" Category="A-Agfa,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats Quadrat vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaMvAllDocXmlFcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats Quadrat vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">AGFA</Setting>
@@ -1553,7 +1558,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="AgfaWishBruRdvHl7FcpOut" Category="A-Wish,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaWishBruRdvHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -1571,7 +1576,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteHL7">\\brwitfio1\c$\Program Files (x86)\SBIM\.NET\Sbim_HL7_Rdv_Mas\IN</Setting>
     <Setting Target="Host" Name="RPFileHL7"></Setting>
   </Item>
-  <Item Name="AgfaWishHudRdvHl7FcpOut" Category="A-Wish,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaWishHudRdvHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -1589,7 +1594,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteHL7">\\BRWITFIO1\C$\Program Files (x86)\SBIM\.NET\HL7HUD\IN</Setting>
     <Setting Target="Host" Name="RPFileHL7"></Setting>
   </Item>
-  <Item Name="AgfaBdocBruImgHl7TcpOut" Category="A-Agfa,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocBruImgHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">SPICA</Setting>
     <Setting Target="Adapter" Name="Port">21971</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -1599,7 +1604,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaBdocBruImgHl7TcpFwdPrep" Category="A-Agfa,A-Bdoc,T-IMG,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocBruImgHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Bdoc,T-IMG,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.8.238</Setting>
     <Setting Target="Adapter" Name="Port">21923</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -1608,7 +1613,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaBdocHudImgHl7TcpOut" Category="A-Agfa,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocHudImgHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">ATAIR</Setting>
     <Setting Target="Adapter" Name="Port">21791</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -1618,7 +1623,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaBdocHudImgHl7TcpFwdPrep" Category="A-Agfa,A-Bdoc,T-IMG,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Imagerie vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocHudImgHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Bdoc,T-IMG,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Imagerie vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FailureTimeout">-1</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
@@ -1628,14 +1633,14 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FileArchivePath">G:\PREP\AgfaORM\out\Bdoc\Hud</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
   </Item>
-  <Item Name="AgfaBruImgHl7TcpIn" Category="A-Agfa,T-IMG,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des informations pour l&apos;imagerie d&apos;Agfa vers Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBruImgHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-IMG" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des informations pour l&apos;imagerie d&apos;Agfa vers Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21922</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaORM\archive\Bru</Setting>
     <Setting Target="Host" Name="UseAckCommitCodes">0</Setting>
     <Setting Target="Host" Name="TargetConfigNames">AgfaAllImgRouting</Setting>
   </Item>
-  <Item Name="AgfaHudImgHl7TcpIn" Category="A-Agfa,T-IMG,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des informations pour l&apos;imagerie d&apos;Agfa vers Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaHudImgHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-IMG" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des informations pour l&apos;imagerie d&apos;Agfa vers Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21831</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaORM\archive\Hud</Setting>
@@ -1643,7 +1648,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">AgfaAllImgRouting</Setting>
     <Setting Target="Host" Name="UseAckCommitCodes">0</Setting>
   </Item>
-  <Item Name="AgfaeiBruImgHl7TcpIn" Category="A-Agfa,T-IMG,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Messages ORM EI Quadrat-Agfa vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaeiBruImgHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-IMG" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Messages ORM EI Quadrat-Agfa vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21932</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaORM\archive\Bruei</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
@@ -1651,7 +1656,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="MessageSchemaCategory">2.3</Setting>
     <Setting Target="Host" Name="TargetConfigNames">AgfaAllImgRouting</Setting>
   </Item>
-  <Item Name="AgfaBruRdvHl7TcpIn" Category="A-Agfa,T-RDV,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Rendez-vous QPlanner vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBruRdvHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-RDV" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Rendez-vous QPlanner vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21711</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaRV\archive\Bru</Setting>
@@ -1659,7 +1664,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">AgfaAllRdvRouting</Setting>
     <Setting Target="Adapter" Name="JobPerConnection">1</Setting>
   </Item>
-  <Item Name="AgfaHudRdvHl7TcpIn" Category="A-Agfa,T-RDV,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Rendez-vous QPlanner HUDERF vers Wish" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaHudRdvHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,T-RDV" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Rendez-vous QPlanner HUDERF vers Wish" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Port">21751</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaRV\archive\Hud</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
@@ -1669,7 +1674,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="JobPerConnection">1</Setting>
     <Setting Target="Host" Name="MessageSchemaCategory">2.3</Setting>
   </Item>
-  <Item Name="AgfaBdocBruRdvHl7TcpOut" Category="A-Bdoc,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner H.U.D.E.R.F. vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocBruRdvHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner H.U.D.E.R.F. vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaRV\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">G:\PROD\AgfaRV\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -1678,7 +1683,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaBdocBruRdvHl7TcpFwdPrep" Category="A-Bdoc,A-Agfa,T-RDV,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner H.U.D.E.R.F. vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocBruRdvHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Agfa,T-RDV,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner H.U.D.E.R.F. vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PREP\AgfaRV\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">G:\PREP\AgfaRV\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -1687,7 +1692,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaBdocHudRdvHl7TcpOut" Category="A-Bdoc,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner H.U.D.E.R.F. vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocHudRdvHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Agfa,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner H.U.D.E.R.F. vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaRV\out\Bdoc\Hud</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">G:\PROD\AgfaRV\out\Bdoc\Hud</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -1696,7 +1701,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaBdocHudRdvHl7TcpFwdPrep" Category="A-Bdoc,A-Agfa,T-RDV,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner H.U.D.E.R.F. vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBdocHudRdvHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Agfa,T-RDV,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous QPlanner H.U.D.E.R.F. vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PREP\AgfaRV\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">G:\PREP\AgfaRV\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -1705,7 +1710,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsAllLabRouting" Category="A-Glims,T-LAB,A-NIPT" ClassName="CHUBXL.BP.NEW.GlimsHl7Routing" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des analyses de laboratoire" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllLabRouting" Category="2.URBA-ON,1.MON-ON,A-Glims,T-LAB,A-NIPT" ClassName="CHUBXL.BP.NEW.GlimsHl7Routing" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des analyses de laboratoire" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -1714,27 +1719,27 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">15</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="GlimsAllMFURouting" Category="A-Glims,T-LAB,T-MFU" ClassName="CHUBXL.BP.NEW.GlimsHl7MFURouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllMFURouting" Category="2.URBA-ON,1.MON-ON,A-Glims,T-LAB,T-MFU" ClassName="CHUBXL.BP.NEW.GlimsHl7MFURouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="GlimsAllHcRouting" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BP.NEW.GlimsHcRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des résultats de laboratoire vers MediBridge" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcRouting" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BP.NEW.GlimsHcRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des résultats de laboratoire vers MediBridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="GlimsabruHudDocHl7FcpIn" Category="A-Glims,T-DOC" ClassName="CHUBXL.BS.NEW.GlimsPdfFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats labo vers Abrumet" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsabruHudDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,T-DOC" ClassName="CHUBXL.BS.NEW.GlimsPdfFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats labo vers Abrumet" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FilePath">\\lhub-ulb.be\data\glims-partage\bDOC\HUDERF</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.PDF</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glimsabru\archive\Hud</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsabruBruDocHl7FcpIn" Category="A-Glims,T-DOC" ClassName="CHUBXL.BS.NEW.GlimsPdfFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats labo vers Abrumet" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsabruBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,T-DOC" ClassName="CHUBXL.BS.NEW.GlimsPdfFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats labo vers Abrumet" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FilePath">\\lhub-ulb.be\data\glims-partage\bDOC\HBR</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.PDF</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glimsabru\archive\Bru</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsBdocabruBruDocHl7FcpOut" Category="A-Glims,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsBdocabruBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">GLIMSABRU</Setting>
@@ -1755,7 +1760,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Glimsabru\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Glimsabru\out\Bdoc\Bru</Setting>
   </Item>
-  <Item Name="GlimsBdocabruHudDocHl7FcpOut" Category="A-Glims,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsBdocabruHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">GLIMSABRU</Setting>
@@ -1776,7 +1781,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Glimsabru\out\Bdoc\Hud</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Glimsabru\out\Bdoc\Hud</Setting>
   </Item>
-  <Item Name="GlimsMvabruMvAllDocXmlFcpOut" Category="A-Glims,T-DOC,T-LAB" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des iReport Glims vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsMvabruMvAllDocXmlFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,T-DOC,T-LAB" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des iReport Glims vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">pdf</Setting>
     <Setting Target="Host" Name="FilePathBLOB">\\Sharatan\ACScanImport$\PDF1\GLIMS\</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Glimsabru\out\Mv\All</Setting>
@@ -1787,7 +1792,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination">MV</Setting>
     <Setting Target="Host" Name="SystemSource">GLIMS</Setting>
   </Item>
-  <Item Name="GlimsAllHchoneFcpIn" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHchoneFcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\all</Setting>
@@ -1803,7 +1808,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcBJPFcpIn" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcBJPFcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\all</Setting>
@@ -1819,7 +1824,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcMedarFcpIn" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcMedarFcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\all</Setting>
@@ -1835,7 +1840,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcMedidocFcpIn" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcMedidocFcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\all</Setting>
@@ -1851,7 +1856,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcMedigestFcpIn" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcMedigestFcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\all</Setting>
@@ -1868,7 +1873,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
     <Setting Target="Host" Name="BusinessPartner"></Setting>
   </Item>
-  <Item Name="GlimsAllHcSocrateFcpIn" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcSocrateFcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BS.NEW.GlimsHcFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims pour Medibridge" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medibridge\archive\all</Setting>
@@ -1884,7 +1889,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="GlimsAllHchoneFcpOut" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format hone" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHchoneFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format hone" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1897,7 +1902,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcBJPFcpOut" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format BJP" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcBJPFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format BJP" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1910,7 +1915,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcMedarFcpOut" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format Medar" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcMedarFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format Medar" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1923,7 +1928,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcMedidocFcpOut" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format Medidoc" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcMedidocFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format Medidoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1936,7 +1941,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcMedigestFcpOut" Category="A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format Medigest" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcMedigestFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect,T-HC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format Medigest" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1949,7 +1954,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsAllHcSocrateFcpOut" Category="A-Glims,A-HealthConnect" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format  Socrate" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllHcSocrateFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-HealthConnect" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers MediBridge format  Socrate" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="AlertRetryGracePeriod">0</Setting>
@@ -1962,7 +1967,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsAllLabHl7FcpIn" Category="A-Glims" ClassName="CHUBXL.BS.NEW.GlimsHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllLabHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims" ClassName="CHUBXL.BS.NEW.GlimsHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glims\archive\All</Setting>
@@ -1978,7 +1983,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="GlimsBruLabHl7TcpIn" Category="A-Glims,T-LAB,MIT" ClassName="CHUBXL.BS.NEW.GlimsHl7TcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des résultats de laboratoire pour Brugmann (Glims)" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsBruLabHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,T-LAB" ClassName="CHUBXL.BS.NEW.GlimsHl7TcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des résultats de laboratoire pour Brugmann (Glims)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glims\archive\Bru</Setting>
@@ -2004,7 +2009,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="GlimsHudLabHl7TcpIn" Category="A-Glims,T-LAB,MIT" ClassName="CHUBXL.BS.NEW.GlimsHl7TcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des résultats de laboratoire pour HUDERF (Glims)" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsHudLabHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,T-LAB" ClassName="CHUBXL.BS.NEW.GlimsHl7TcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des résultats de laboratoire pour HUDERF (Glims)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glims\archive\Hud</Setting>
@@ -2030,7 +2035,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="GlimsIcipHudLabHl7TcpOut" Category="A-Glims,A-Icip,T-LAB" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers le logiciel des USI (ICIP) de l&apos;HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsIcipHudLabHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Icip,T-LAB" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers le logiciel des USI (ICIP) de l&apos;HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glims\out\Icip\Hud</Setting>
@@ -2056,7 +2061,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="GlimsEcareBruLabHl7FcpOut" Category="A-Glims,A-Ecare,T-LAB" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers le logiciel des urgences (Ecare)  Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsEcareBruLabHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Ecare,T-LAB" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des résultats de laboratoire vers le logiciel des urgences (Ecare)  Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">GLIMS</Setting>
@@ -2075,7 +2080,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsDialyseAllLabHl7TcpOut" Category="A-Glims,A-Dialyse,T-LAB" ClassName="CHUBXL.BO.NEW.RawTcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Trnsmission des résultats de laboratoire vers le logiciel de dialyse (hemadial)" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsDialyseAllLabHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Dialyse,T-LAB" ClassName="CHUBXL.BO.NEW.RawTcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Trnsmission des résultats de laboratoire vers le logiciel de dialyse (hemadial)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">GLIMS</Setting>
@@ -2101,7 +2106,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="GlimsBdocBruLabHl7TcpOut" Category="A-Glims,A-Bdoc,T-LAB" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats laboratoire vers l&apos;environnement de test du DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsBdocBruLabHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Bdoc,T-LAB" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats laboratoire vers l&apos;environnement de test du DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glims\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Glims\out\Bdoc\Bru</Setting>
     <Setting Target="Adapter" Name="IPAddress">SPICA</Setting>
@@ -2111,7 +2116,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsBdocBruLabHl7TcpFwdPrep" Category="A-Glims,A-Bdoc,T-LAB,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats laboratoire vers l&apos;environnement de test du DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsBdocBruLabHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Bdoc,T-LAB,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats laboratoire vers l&apos;environnement de test du DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glims\out\Prep\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Glims\out\Prep\Bru</Setting>
     <Setting Target="Adapter" Name="IPAddress">10.20.8.238</Setting>
@@ -2121,7 +2126,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsBdocHudLabHl7TcpOut" Category="A-Glims,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats laboratoire vers l&apos;environnement de test du DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsBdocHudLabHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des résultats laboratoire vers l&apos;environnement de test du DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glims\out\Bdoc\Hud</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Glims\out\Bdoc\Hud</Setting>
     <Setting Target="Adapter" Name="IPAddress">ATAIR</Setting>
@@ -2131,7 +2136,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsBdocHudLabHl7TcpFwdPrep" Category="A-Glims,A-Bdoc,T-LAB,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des réultats laboratoire HUDERF vers l&apos;environnement de PREPROD" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsBdocHudLabHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Bdoc,T-LAB,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des réultats laboratoire HUDERF vers l&apos;environnement de PREPROD" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FailureTimeout">-1</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Glims\out\Prep\Hud</Setting>
@@ -2140,7 +2145,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Port">21083</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsAllMFUHl7FcpIn" Category="A-Glims,T-LAB,T-MFU" ClassName="CHUBXL.BS.NEW.GlimsHl7FcpIn" PoolSize="1" Enabled="false" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllMFUHl7FcpIn" Category="2.URBA-ON,1.MON-OFF,A-Glims,T-LAB,T-MFU" ClassName="CHUBXL.BS.NEW.GlimsHl7FcpIn" PoolSize="1" Enabled="false" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\GlimsMFU\archive\All</Setting>
@@ -2156,7 +2161,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="GlimsAllMFUHl7TcpIn" Category="A-Glims,T-LAB,T-MFU" ClassName="CHUBXL.BS.NEW.GlimsHl7TcpIn" PoolSize="1" Enabled="false" Foreground="false" DisableErrorTraps="false" Comment="Reception du fichier des analyses laboratoire " LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllMFUHl7TcpIn" Category="2.URBA-ON,1.MON-OFF,A-Glims,T-LAB,T-MFU" ClassName="CHUBXL.BS.NEW.GlimsHl7TcpIn" PoolSize="1" Enabled="false" Foreground="false" DisableErrorTraps="false" Comment="Reception du fichier des analyses laboratoire " LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\GlimsMFU\archive\All</Setting>
@@ -2182,7 +2187,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="GlimsGlimsBruMFUHl7FcpOut" Category="A-Glims,A-Agfa,T-LAB,T-MFU" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des analysess de laboratoire vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsGlimsBruMFUHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Agfa,T-LAB,T-MFU" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des analysess de laboratoire vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">GLIMS</Setting>
@@ -2201,7 +2206,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsGlimsHudMFUHl7TcpOut" Category="A-Glims,T-LAB,T-MFU" ClassName="CHUBXL.BO.NEW.RawTcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Transmission du fichier des analyses de laboratoires vers l&apos;environnement de PREPRO" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsGlimsHudMFUHl7TcpOut" Category="2.URBA-ON,1.MON-OFF,A-Glims,T-LAB,T-MFU" ClassName="CHUBXL.BO.NEW.RawTcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Transmission du fichier des analyses de laboratoires vers l&apos;environnement de PREPRO" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.8.61</Setting>
     <Setting Target="Adapter" Name="Port">21411</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -2211,11 +2216,11 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="FailureTimeout">-1</Setting>
   </Item>
-  <Item Name="InfohosMdAllPhaRouting" Category="A-Infohos" ClassName="CHUBXL.BP.NEW.InfohosMdHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosMdAllPhaRouting" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BP.NEW.InfohosMdHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="InfohosSpeAllPhaRouting" Category="A-Infohos,T-FAC,A-Oxygen" ClassName="CHUBXL.BP.NEW.InfohosSpeHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Transfert des spécialités d&apos;Infohos vers Wish" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosSpeAllPhaRouting" Category="2.URBA-ON,1.MON-ON,A-Infohos,T-FAC,A-Oxygen" ClassName="CHUBXL.BP.NEW.InfohosSpeHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Transfert des spécialités d&apos;Infohos vers Wish" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="InfohosArtAllPhaRouting" Category="A-Infohos" ClassName="CHUBXL.BP.NEW.InfohosArtXmlRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Articles Infohos vers Intranet" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosArtAllPhaRouting" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BP.NEW.InfohosArtXmlRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Articles Infohos vers Intranet" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -2224,7 +2229,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">15</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="InfohosTsAllPhaRouting" Category="A-Infohos" ClassName="CHUBXL.BP.NEW.InfohosTsRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosTsAllPhaRouting" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BP.NEW.InfohosTsRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
     <Setting Target="Host" Name="RetryInterval">5</Setting>
@@ -2232,7 +2237,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">15</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="InfohosBdocBruPhaHl7TcpOut" Category="A-Infohos,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosBdocBruPhaHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Infohos,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosMd\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\InfohosMd\out\Bdoc\Bru</Setting>
     <Setting Target="Adapter" Name="IPAddress">SPICA</Setting>
@@ -2241,7 +2246,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InfohosBdocBruPhaHl7TcpFwd" Category="A-Infohos,A-Bdoc,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosBdocBruPhaHl7TcpFwd" Category="2.URBA-ON,1.MON-ON,A-Infohos,A-Bdoc,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PREP\InfohosMd\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PREP\InfohosMd\out\Bdoc\Bru</Setting>
     <Setting Target="Adapter" Name="IPAddress">10.20.8.238</Setting>
@@ -2250,7 +2255,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InfohosBdocHudPhaHl7TcpOut" Category="A-Infohos,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosBdocHudPhaHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Infohos,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosMd\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\InfohosMd\out\Bdoc\Bru</Setting>
     <Setting Target="Adapter" Name="IPAddress">ATAIR</Setting>
@@ -2259,7 +2264,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InfohosBdocHudPhaHl7TcpFwd" Category="A-Infohos,A-Bdoc,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosBdocHudPhaHl7TcpFwd" Category="2.URBA-ON,1.MON-ON,A-Infohos,A-Bdoc,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath"></Setting>
     <Setting Target="Host" Name="FileErrorArchivePath"></Setting>
     <Setting Target="Adapter" Name="IPAddress">10.20.8.238</Setting>
@@ -2268,7 +2273,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InfohosBdocBruPhaNotHl7TcpOut" Category="A-Infohos,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosBdocBruPhaNotHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Infohos,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath"></Setting>
     <Setting Target="Host" Name="FileErrorArchivePath"></Setting>
     <Setting Target="Adapter" Name="IPAddress">BRDPIDEV1</Setting>
@@ -2277,14 +2282,14 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InfohosSpeAllPhaDlmFcpIn" Category="A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichier spécialités et implants d&apos;Infohos vers Wish" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosSpeAllPhaDlmFcpIn" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichier spécialités et implants d&apos;Infohos vers Wish" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\InfohosSpe\archive\All</Setting>
     <Setting Target="Adapter" Name="FilePath">\\brapo01\Infofile\ToIbm\Facturation\Articles</Setting>
     <Setting Target="Adapter" Name="FileSpec">S*</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosSpe\archive\All</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InfohosTsAllPhaXmlFcpIn" Category="A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosTsFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosTsAllPhaXmlFcpIn" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosTsFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosTs\archive\All</Setting>
     <Setting Target="Host" Name="AlertGracePeriod">0</Setting>
@@ -2299,7 +2304,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="InfohosArtAllPhaXmlFcpIn" Category="A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Articles Infohos vers l&apos;intranet" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosArtAllPhaXmlFcpIn" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Articles Infohos vers l&apos;intranet" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosArt\archive\All</Setting>
@@ -2315,7 +2320,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp"></Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="InfohosArtAllPhaXmlFcpOut" Category="A-Infohos" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Articles Infohos vers Intranet" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosArtAllPhaXmlFcpOut" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Articles Infohos vers Intranet" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -2329,7 +2334,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="InfohosTsAllPhaDlmWsOut" Category="A-Infohos" ClassName="CHUBXL.BO.HealthConnect.JournalEntryServiceSoap" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosTsAllPhaDlmWsOut" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BO.HealthConnect.JournalEntryServiceSoap" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
     <Setting Target="Host" Name="RetryInterval">5</Setting>
@@ -2347,14 +2352,14 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ProxyHTTPS">0</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">30</Setting>
   </Item>
-  <Item Name="InfohosMdBetaAllPhaHl7FcpIn" Category="A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosMdBetaAllPhaHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosMdBeta\archive\All</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\InfohosMdBeta\archive</Setting>
     <Setting Target="Adapter" Name="FilePath">\\BRAPOE01TEST\ExternalMessaging.Beta\out\FromApotheekToEveryone\MFNM16</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InfohosMdAllPhaHl7FcpIn" Category="A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosMdAllPhaHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosMd\archive\All</Setting>
     <Setting Target="Host" Name="TargetConfigNames">InfohosMdAllPhaRouting</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\InfohosMd\archive</Setting>
@@ -2363,7 +2368,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="MessageSchemaCategory">2.6</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InfohosSpeBruPhaHl7FtpOut" Category="A-Infohos" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichier des spécialités d&apos;Infohos vers Wish" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosSpeBruPhaHl7FtpOut" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichier des spécialités d&apos;Infohos vers Wish" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosMd\out\Bru</Setting>
     <Setting Target="Host" Name="System">AS400</Setting>
     <Setting Target="Adapter" Name="Credentials">WISH</Setting>
@@ -2374,7 +2379,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Host" Name="FailureTimeout">60</Setting>
   </Item>
-  <Item Name="InfohosSpeHudPhaHl7FtpOut" Category="A-Infohos" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi du signalétique des médicaments iNFOHOS VERS wISH huderf" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosSpeHudPhaHl7FtpOut" Category="2.URBA-ON,1.MON-ON,A-Infohos" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi du signalétique des médicaments iNFOHOS VERS wISH huderf" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Credentials">WISH</Setting>
     <Setting Target="Adapter" Name="FTPPort">21</Setting>
     <Setting Target="Adapter" Name="FTPServer">br400prd</Setting>
@@ -2384,9 +2389,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\InfohosMd\out\Hud</Setting>
     <Setting Target="Host" Name="FailureTimeout">60</Setting>
   </Item>
-  <Item Name="MvAllArcRouting" Category="A-Mv" ClassName="CHUBXL.BP.NEW.MvHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="MV vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="MvAllArcRouting" Category="2.URBA-ON,1.MON-ON,A-Mv" ClassName="CHUBXL.BP.NEW.MvHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="MV vers DPI" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="MvAllArcHl7TcpIn" Category="A-Mv,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des documents archivés vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="MvAllArcHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Mv" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des documents archivés vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Mv\archive\All</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Mv\archive\All</Setting>
     <Setting Target="Adapter" Name="Port">21381</Setting>
@@ -2399,7 +2404,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="IgnoreInboundAck">0</Setting>
   </Item>
-  <Item Name="MvBdocHudArcHl7TcpOut" Category="A-Mv,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références des documents scannés vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="MvBdocHudArcHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Mv,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références des documents scannés vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">ATAIR</Setting>
     <Setting Target="Adapter" Name="Port">21811</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
@@ -2408,7 +2413,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
   </Item>
-  <Item Name="MvBdocAllArcHl7TcpFwdPrep" Category="A-Mv,A-Bdoc,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="ENvoi des références des documents scannés vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="MvBdocAllArcHl7TcpFwdPrep" Category="2.URBA-ON,1.MON-ON,A-Mv,A-Bdoc,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="ENvoi des références des documents scannés vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.8.238</Setting>
     <Setting Target="Adapter" Name="Port">21383</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
@@ -2417,7 +2422,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
   </Item>
-  <Item Name="MvBdocBruArcHl7TcpOut" Category="A-Mv,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références des documents scannés Brugmann vers le DPI (Bdoc)" LogTraceEvents="false" Schedule="">
+  <Item Name="MvBdocBruArcHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Mv,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références des documents scannés Brugmann vers le DPI (Bdoc)" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">SPICA</Setting>
     <Setting Target="Adapter" Name="Port">21991</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
@@ -2426,7 +2431,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
   </Item>
-  <Item Name="MedecinAllMedRouting" Category="A-Medecin" ClassName="CHUBXL.BP.NEW.WishMedHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage des messages médecins vers périphériques" LogTraceEvents="false" Schedule="">
+  <Item Name="MedecinAllMedRouting" Category="2.URBA-ON,1.MON-ON,A-Medecin" ClassName="CHUBXL.BP.NEW.WishMedHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage des messages médecins vers périphériques" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -2435,7 +2440,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">15</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="RefmedAllMedRouting" Category="A-Medecin,A-Refmed,T-GDR" ClassName="CHUBXL.BP.NEW.RefmedHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage des messages médecins vers périphériques" LogTraceEvents="false" Schedule="">
+  <Item Name="RefmedAllMedRouting" Category="2.URBA-ON,1.MON-ON,A-Medecin,A-Refmed,T-GDR" ClassName="CHUBXL.BP.NEW.RefmedHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage des messages médecins vers périphériques" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -2444,7 +2449,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">15</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="RefmedAllMedHl7FcpIn" Category="A-Medecin,A-Refmed,T-GDR" ClassName="CHUBXL.BS.NEW.RefmedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Données Médecins" LogTraceEvents="false" Schedule="">
+  <Item Name="RefmedAllMedHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Medecin,A-Refmed,T-GDR" ClassName="CHUBXL.BS.NEW.RefmedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Données Médecins" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medecin\archive\All</Setting>
@@ -2460,9 +2465,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp"></Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="OxygenAllDocRouting" Category="A-Oxygen,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.OxygenHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats d&apos;Astraia (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="OxygenAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Oxygen,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.OxygenHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats d&apos;Astraia (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="OxygenBruDocHl7FcpIn" Category="A-Oxygen,T-DOC" ClassName="CHUBXL.BS.NEW.OxygenHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports de Kine (Oxygen)" LogTraceEvents="false" Schedule="">
+  <Item Name="OxygenBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Oxygen,T-DOC" ClassName="CHUBXL.BS.NEW.OxygenHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports de Kine (Oxygen)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Oxygen\archive\Bru</Setting>
@@ -2478,7 +2483,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="OxygenBdocHudDocHl7FcpOut" Category="A-Oxygen,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports du logiciel EndoBase HUDERF vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="OxygenBdocHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Oxygen,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports du logiciel EndoBase HUDERF vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">RTF</Setting>
     <Setting Target="Host" Name="FilePathBLOB">\\atair\b$\Integrations\Documents\</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Oxygen\out\Bdoc\Hud</Setting>
@@ -2489,7 +2494,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination">Bdoc</Setting>
     <Setting Target="Host" Name="SystemSource">Oxygen</Setting>
   </Item>
-  <Item Name="OxygenBdocBruDocHl7FcpOut" Category="A-Oxygen,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports du logiciel EndoBase HUDERF vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="OxygenBdocBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Oxygen,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports du logiciel EndoBase HUDERF vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">RTF</Setting>
     <Setting Target="Host" Name="FilePathBLOB">\\spica\a$\Integrations-Br\Documents\</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Oxygen\out\Bdoc\Bru</Setting>
@@ -2500,7 +2505,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination">Bdoc</Setting>
     <Setting Target="Host" Name="SystemSource">Oxygen</Setting>
   </Item>
-  <Item Name="OxygenMvAllDocHl7FcpOut" Category="A-Oxygen,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Kine (Oxygen) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="OxygenMvAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Oxygen,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Kine (Oxygen) vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Oxygen\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Oxygen\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathRemoteTXT">\\Sharatan\ACScanImport$\RTF1\KINE\</Setting>
@@ -2515,7 +2520,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="OxygenBruFacDlmFcpIn" Category="A-Oxygen,T-FAC" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichier facturation Kine Oxygen" LogTraceEvents="false" Schedule="">
+  <Item Name="OxygenBruFacDlmFcpIn" Category="2.URBA-ON,1.MON-ON,A-Oxygen,T-FAC" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichier facturation Kine Oxygen" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FileSpec">ki*.tf</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Oxygen\Fact\archive</Setting>
     <Setting Target="Adapter" Name="FilePath">\\broxy01\c$\Facturation</Setting>
@@ -2523,7 +2528,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Native</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="OxygenWishBruFacDlmFtpOut" Category="A-Oxygen,A-Wish,T-FAC" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Facturation Kine Oxygen vers Wish" LogTraceEvents="false" Schedule="">
+  <Item Name="OxygenWishBruFacDlmFtpOut" Category="2.URBA-ON,1.MON-ON,A-Oxygen,A-Wish,T-FAC" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Facturation Kine Oxygen vers Wish" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Credentials">WISH</Setting>
     <Setting Target="Adapter" Name="FTPPort">21</Setting>
     <Setting Target="Adapter" Name="FTPServer">br400prd</Setting>
@@ -2534,7 +2539,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="EcareBruDocRouting" Category="A-Ecare,T-DOC" ClassName="CHUBXL.BP.NEW.EcareHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage rapport Ecare vers MV" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareBruDocRouting" Category="2.URBA-ON,1.MON-ON,A-Ecare,T-DOC" ClassName="CHUBXL.BP.NEW.EcareHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage rapport Ecare vers MV" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -2543,7 +2548,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">15</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="EcareBruDocHl7FcpIn" Category="A-Ecare,T-DOC" ClassName="CHUBXL.BS.NEW.EcareHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports des urgences (Ecare)" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Ecare,T-DOC" ClassName="CHUBXL.BS.NEW.EcareHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports des urgences (Ecare)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Ecare\archive\Bru</Setting>
@@ -2559,7 +2564,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="EcareBdocBruDocHl7FcpOut" Category="A-Ecare,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareBdocBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Ecare,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Ecare</Setting>
@@ -2580,7 +2585,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Ecare\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Ecare\out\Bdoc\Bru</Setting>
   </Item>
-  <Item Name="EcareMvAllDocHl7FcpOut" Category="A-Ecare,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Rapports Ecare vers MV" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareMvAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Ecare,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Rapports Ecare vers MV" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Ecare</Setting>
@@ -2602,7 +2607,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="EcareAgfaBruDocHl7FcpOut" Category="A-Ecare,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareAgfaBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Ecare,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Ecare</Setting>
@@ -2621,11 +2626,11 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="DiamicAllDocRouting" Category="A-Diamic,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.DiamicHl7Routing" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des résultats médicaux (format impression)" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Diamic,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.DiamicHl7Routing" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des résultats médicaux (format impression)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="DiamicAllDocHl7FcpIn" Category="A-Diamic,T-DOC" ClassName="CHUBXL.BS.NEW.DiamicHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports d&apos;anatomie-pathologique (Diamic)" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicAllDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Diamic,T-DOC" ClassName="CHUBXL.BS.NEW.DiamicHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports d&apos;anatomie-pathologique (Diamic)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\DIAMIC\archive\All</Setting>
@@ -2641,7 +2646,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="DiamicBdocBruDocHl7FcpOut" Category="A-Bdoc,A-Diamic,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb HUDERF de test" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicBdocBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Diamic,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb HUDERF de test" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">DIAMIC</Setting>
@@ -2661,7 +2666,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteTXT">\\SPICA\a$\Integrations-br\Diamic\</Setting>
     <Setting Target="Host" Name="FilePathRemoteXML">\\SPICA\a$\Integrations-br\Diamic\</Setting>
   </Item>
-  <Item Name="DiamicBdocHudDocHl7FcpOut" Category="A-Bdoc,A-Diamic,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb HUDERF de test" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicBdocHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Diamic,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb HUDERF de test" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">DIAMIC</Setting>
@@ -2681,7 +2686,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteTXT">\\atair\b$\Integrations\Diamic\</Setting>
     <Setting Target="Host" Name="FilePathRemoteXML">\\atair\b$\Integrations\Diamic\</Setting>
   </Item>
-  <Item Name="DiamicBdocAllDocHl7FcpOutPrep" Category="A-Bdoc,A-Diamic,T-DOC,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb HUDERF de test" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicBdocAllDocHl7FcpOutPrep" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Diamic,T-DOC,T-FWD" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb HUDERF de test" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">DIAMIC</Setting>
@@ -2701,7 +2706,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteTXT"></Setting>
     <Setting Target="Host" Name="FilePathRemoteXML"></Setting>
   </Item>
-  <Item Name="DiamicMvAllDocHl7FcpOut" Category="A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicMvAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">DIAMIC</Setting>
@@ -2723,7 +2728,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="DiamicAgfaBruDocHl7FcpOut" Category="A-Diamic,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicAgfaBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Diamic,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">DIAMIC</Setting>
@@ -2742,7 +2747,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="DiamicAgfaHudDocHl7FcpOut" Category="A-Diamic,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicAgfaHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Diamic,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">DIAMIC</Setting>
@@ -2760,14 +2765,14 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="DiamicAllFacDlmFcpIn" Category="A-Diamic,T-FAC" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichier facturation Diamic" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicAllFacDlmFcpIn" Category="2.URBA-ON,1.MON-ON,A-Diamic,T-FAC" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichier facturation Diamic" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FileSpec">EL*.txt</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Diamic\Fact\archive</Setting>
     <Setting Target="Adapter" Name="FilePath">\\10.15.102.10\diamicliaisons\activite\BRG\out</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Diamic\Fact\archive</Setting>
     <Setting Target="Adapter" Name="Charset">Native</Setting>
   </Item>
-  <Item Name="DiamicWishBruFacDlmFtpOut" Category="A-Diamic,A-Wish,T-FAC" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Facturation Diamic vers Wish" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicWishBruFacDlmFtpOut" Category="2.URBA-ON,1.MON-ON,A-Diamic,A-Wish,T-FAC" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Facturation Diamic vers Wish" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Credentials">WISH</Setting>
     <Setting Target="Adapter" Name="FTPPort">21</Setting>
     <Setting Target="Adapter" Name="FTPServer">br400prd</Setting>
@@ -2777,7 +2782,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Host" Name="FailureTimeout">60</Setting>
   </Item>
-  <Item Name="DiamicWishHudFacDlmFtpOut" Category="A-Diamic,A-Wish,T-FAC" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Facturation Diamic vers Wish" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicWishHudFacDlmFtpOut" Category="2.URBA-ON,1.MON-ON,A-Diamic,A-Wish,T-FAC" ClassName="CHUBXL.BO.NEW.AllFtpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Facturation Diamic vers Wish" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Credentials">WISH</Setting>
     <Setting Target="Adapter" Name="FTPPort">21</Setting>
     <Setting Target="Adapter" Name="FTPServer">br400prd</Setting>
@@ -2787,9 +2792,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Host" Name="FailureTimeout">60</Setting>
   </Item>
-  <Item Name="OperaAllRdvRouting" Category="A-Opera,T-RDV" ClassName="CHUBXL.BP.NEW.OperaRdvHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Rendez-vous QPlanner vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaAllRdvRouting" Category="2.URBA-ON,1.MON-ON,A-Opera,T-RDV" ClassName="CHUBXL.BP.NEW.OperaRdvHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Rendez-vous QPlanner vers DPI" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="OperaAllRdvHl7TcpIn" Category="A-Opera,T-RDV,MIT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Transfert des rendez-vous Opera vers Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaAllRdvHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Opera,T-RDV" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Transfert des rendez-vous Opera vers Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\OperaRV\archive\All</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\OperaRV\archive\All</Setting>
     <Setting Target="Adapter" Name="Port">21181</Setting>
@@ -2802,9 +2807,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="IgnoreInboundAck">0</Setting>
   </Item>
-  <Item Name="MososBruDocRouting" Category="A-Mosos,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.MososHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats de MOSOS (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="MososBruDocRouting" Category="2.URBA-ON,1.MON-ON,A-Mosos,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.MososHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats de MOSOS (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="MososBruDocHl7FcpIn" Category="A-Mosos,T-DOC" ClassName="CHUBXL.BS.NEW.MososHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats de MOSOS (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="MososBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Mosos,T-DOC" ClassName="CHUBXL.BS.NEW.MososHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats de MOSOS (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Mosos\archive\Bru</Setting>
     <Setting Target="Adapter" Name="FileAccessTimeout">10</Setting>
@@ -2813,7 +2818,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Mosos\archive\Bru</Setting>
   </Item>
-  <Item Name="MososMvBruDocHl7FcpOut" Category="A-Mosos,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports de MOSOS (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="MososMvBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Mosos,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports de MOSOS (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">RTF</Setting>
     <Setting Target="Host" Name="FailureTimeout">1</Setting>
     <Setting Target="Host" Name="FilePathBLOB">G:\Allgeier\ACScanImport\RTF1\MOSOS\</Setting>
@@ -2828,9 +2833,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Overwrite">1</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AstraiaAllDocRouting" Category="A-Astraia,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.AstraiaHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats d&apos;Astraia (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="AstraiaAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Astraia,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.AstraiaHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats d&apos;Astraia (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="AstraiaBruDocHl7FcpIn" Category="A-Astraia,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.AstraiaHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats d&apos;Astraia (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="AstraiaBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Astraia,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.AstraiaHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des résultats d&apos;Astraia (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Astraia\archive\Bru</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Astraia\archive</Setting>
     <Setting Target="Adapter" Name="FileAccessTimeout">10</Setting>
@@ -2838,7 +2843,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AstraiaMvBruDocHl7FcpOut" Category="A-Astraia,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports d&apos;Astraia (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="AstraiaMvBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Astraia,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports d&apos;Astraia (Gyné) vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Astraia\out\Mv\Bru</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Astraia\out\Mv\Bru</Setting>
     <Setting Target="Host" Name="FilePathRemoteTXT">\\Sharatan\ACScanImport$\PDF1\Astraia</Setting>
@@ -2853,10 +2858,10 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="IcipHudDocRouting" Category="A-Icip,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.IcipHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage des résultats ICIP vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="IcipHudDocRouting" Category="2.URBA-ON,1.MON-ON,A-Icip,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.IcipHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage des résultats ICIP vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
   </Item>
-  <Item Name="IcipHudDocHl7FcpIn" Category="A-Icip,T-DOC" ClassName="CHUBXL.BS.NEW.IcipHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports des USI de l&apos;HUDERF ( ICIP)" LogTraceEvents="false" Schedule="">
+  <Item Name="IcipHudDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Icip,T-DOC" ClassName="CHUBXL.BS.NEW.IcipHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports des USI de l&apos;HUDERF ( ICIP)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Icip\archive\Hud</Setting>
@@ -2872,7 +2877,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="IcipMvHudDocHl7FcpOut" Category="A-Icip,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats ICIP vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="IcipMvHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Icip,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Résultats ICIP vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">ICIP</Setting>
@@ -2894,10 +2899,10 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="OphtalmoAllDocRouting" Category="A-Ophtalmo,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.OphtalmoHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage des résultats Ophtalmo vers Medical Viewer et Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="OphtalmoAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Ophtalmo,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.OphtalmoHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routage des résultats Ophtalmo vers Medical Viewer et Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
   </Item>
-  <Item Name="OphtalmoHudDocHl7FcpIn" Category="A-Ophtalmo,T-DOC" ClassName="CHUBXL.BS.NEW.OphtalmoHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports d&apos;Ophtalmologie pour l&apos;HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="OphtalmoHudDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Ophtalmo,T-DOC" ClassName="CHUBXL.BS.NEW.OphtalmoHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports d&apos;Ophtalmologie pour l&apos;HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Ophtalmo\archive\Hud</Setting>
@@ -2913,7 +2918,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="OphtalmoMvHudDocHl7FcpOut" Category="A-Ophtalmo,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des rapports d&apos;ophtalmologie vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="OphtalmoMvAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Ophtalmo,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des rapports d&apos;ophtalmologie vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Ophtalmo</Setting>
@@ -2935,11 +2940,11 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="EndobaseHudDocRouting" Category="A-Endobase,T-DOC" ClassName="CHUBXL.BP.NEW.BdocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des rapports de Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="EndobaseHudDocRouting" Category="2.URBA-ON,1.MON-ON,A-Endobase,T-DOC" ClassName="CHUBXL.BP.NEW.BdocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des rapports de Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="EndobaseHudDocHl7FcpIn" Category="A-Endobase,T-DOC" ClassName="CHUBXL.BS.NEW.EndobaseHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports du logiciel EndoBase HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="EndobaseHudDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Endobase,T-DOC" ClassName="CHUBXL.BS.NEW.EndobaseHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports du logiciel EndoBase HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Endobase\archive\Hud</Setting>
@@ -2956,7 +2961,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
     <Setting Target="Host" Name="FileProdPath">\\10.20.8.127\f$\Integrations\Documents\</Setting>
   </Item>
-  <Item Name="EndobaseBdocHudDocHl7FcpOut" Category="A-Endobase,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports du logiciel EndoBase HUDERF vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="EndobaseBdocHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Endobase,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports du logiciel EndoBase HUDERF vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
     <Setting Target="Host" Name="FilePathBLOB">\\atair\b$\Integrations\Documents\</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Endobase\out\Bdoc\Hud</Setting>
@@ -2967,7 +2972,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination">DPI</Setting>
     <Setting Target="Host" Name="SystemSource">EndoBase</Setting>
   </Item>
-  <Item Name="EndobaseMvHudDocHl7FcpOut" Category="A-Endobase,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports EndoBase vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="EndobaseMvHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Endobase,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports EndoBase vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Endobase\out\Mv\Hud</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Endobase\out\Mv\Hud</Setting>
     <Setting Target="Host" Name="FilePathRemoteTXT">\\Sharatan\ACScanImport$\PDF1\EndoBase\</Setting>
@@ -2982,9 +2987,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="PlusAllDocRouting" Category="A-Plus,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.PlusXmlRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des rapports de Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="PlusAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Plus,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.PlusXmlRouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Routage des rapports de Bdoc" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="PlusAllDocXmlFcpIn" Category="A-Plus,T-DOC" ClassName="CHUBXL.BS.NEW.PlusXmlFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="PlusAllDocXmlFcpIn" Category="2.URBA-ON,1.MON-ON,A-Plus,T-DOC" ClassName="CHUBXL.BS.NEW.PlusXmlFcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de Bdoc HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Plus\archive\All</Setting>
@@ -3000,7 +3005,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="PlusMvAllDocXmlFcpOut" Category="A-Mv,A-Plus,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Test suppresion documents Agfa vers MV" LogTraceEvents="false" Schedule="">
+  <Item Name="PlusMvAllDocXmlFcpOut" Category="2.URBA-ON,1.MON-ON,A-Mv,A-Plus,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Test suppresion documents Agfa vers MV" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">pdf</Setting>
     <Setting Target="Host" Name="FilePathBLOB">\\Sharatan\ACScanImport$\PDF1\PLUS</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\PLUS\out\Mv\All</Setting>
@@ -3011,7 +3016,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination">MV</Setting>
     <Setting Target="Host" Name="SystemSource">PLUS</Setting>
   </Item>
-  <Item Name="RsbEventAllRouting" Category="A-RsbEvent" ClassName="CHUBXL.BP.NEW.RsbEventXmlRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Articles Infohos vers Intranet" LogTraceEvents="false" Schedule="">
+  <Item Name="RsbEventAllRouting" Category="2.URBA-ON,1.MON-ON,A-RsbEvent" ClassName="CHUBXL.BP.NEW.RsbEventXmlRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Articles Infohos vers Intranet" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -3020,7 +3025,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">15</Setting>
     <Setting Target="Host" Name="AlertOnError">0</Setting>
   </Item>
-  <Item Name="RsbEventAllDocXmlFcpIn" Category="A-RsbEvent,T-DOC" ClassName="CHUBXL.BS.NEW.RsbEventXmlFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Réception fichiers Abrumet RsbEvent" LogTraceEvents="false" Schedule="">
+  <Item Name="RsbEventAllDocXmlFcpIn" Category="2.URBA-ON,1.MON-ON,A-RsbEvent,T-DOC" ClassName="CHUBXL.BS.NEW.RsbEventXmlFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Réception fichiers Abrumet RsbEvent" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\RsbEvent\archive\All</Setting>
@@ -3036,7 +3041,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp"></Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="RsbBdocBruDocXmlFcpOut" Category="A-Bdoc,A-RsbEvent,T-DOC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie fichier Abrumet RsbEvent vers Bdoc Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="RsbBdocBruDocXmlFcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-RsbEvent,T-DOC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie fichier Abrumet RsbEvent vers Bdoc Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -3050,7 +3055,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="RsbBdocHudDocXmlFcpOut" Category="A-Bdoc,A-RsbEvent,T-DOC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie fichier Abrumet RsbEvent vers Bdoc Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="RsbBdocHudDocXmlFcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-RsbEvent,T-DOC" ClassName="CHUBXL.BO.NEW.AllFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie fichier Abrumet RsbEvent vers Bdoc Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -3064,16 +3069,16 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="AlphaAllArcRouting" Category="A-Alpha,A-Ciges" ClassName="CHUBXL.BP.NEW.AlphaQDoc" PoolSize="1" Enabled="true" Foreground="false" Comment="Dossiers archives de l&apos;application CIGES à Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="AlphaAllArcRouting" Category="2.URBA-ON,1.MON-ON,A-Alpha,A-Ciges" ClassName="CHUBXL.BP.NEW.AlphaQDoc" PoolSize="1" Enabled="true" Foreground="false" Comment="Dossiers archives de l&apos;application CIGES à Medical Viewer" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="AlphaAllArcDlmFcpIn" Category="A-Alpha,A-Ciges" ClassName="CHUBXL.BS.NEW.AlphaDlmFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Dossiers archives de l&apos;application CIGES à Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="AlphaAllArcDlmFcpIn" Category="2.URBA-ON,1.MON-ON,A-Alpha,A-Ciges" ClassName="CHUBXL.BS.NEW.AlphaDlmFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Dossiers archives de l&apos;application CIGES à Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Ciges\archive\All</Setting>
     <Setting Target="Adapter" Name="FileAccessTimeout">10</Setting>
     <Setting Target="Adapter" Name="FilePath">G:\PROD\Alpha\in\</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishEnsPrepAllAdtHl7TcpOut" Category="A-Wish" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers l&apos;environnement de Pre-Production" LogTraceEvents="false" Schedule="">
+  <Item Name="WishEnsPrepAllAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,T-DUP" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données Administratives vers l&apos;environnement de Pre-Production" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">boron01</Setting>
     <Setting Target="Adapter" Name="Port">21463</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\EnsPrep\All</Setting>
@@ -3084,7 +3089,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="EcareBruImgHl7TcpIn" Category="A-Agfa,A-Ecare" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des documents archivés vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareBruImgHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Ecare" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des documents archivés vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\EcareORM\archive\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\EcareORM\archive\Bru</Setting>
     <Setting Target="Adapter" Name="Port">21101</Setting>
@@ -3097,9 +3102,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="IgnoreInboundAck">0</Setting>
   </Item>
-  <Item Name="EcareBruImgRouting" Category="A-Ecare,A-Agfa" ClassName="CHUBXL.BP.NEW.EcareBruImgRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie demande d&apos;examen d&apos;imagerie depuis Ecare vers le RIS" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareBruImgRouting" Category="2.URBA-ON,1.MON-ON,A-Ecare,A-Agfa" ClassName="CHUBXL.BP.NEW.EcareBruImgRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie demande d&apos;examen d&apos;imagerie depuis Ecare vers le RIS" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="EcareAgfaBruImgHl7TcpOut" Category="A-Agfa,A-Ecare" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareAgfaBruImgHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Ecare" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.9.152</Setting>
     <Setting Target="Adapter" Name="Port">21102</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -3109,7 +3114,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaBruImgUrgHl7TcpIn" Category="A-Agfa,A-Ecare" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des documents archivés vers DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaBruImgUrgHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Ecare" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie des documents archivés vers DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\AgfaUrgORM\archive\Bru</Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\AgfaUrgORM\archive\Bru</Setting>
     <Setting Target="Adapter" Name="Port">21111</Setting>
@@ -3122,7 +3127,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="IgnoreInboundAck">0</Setting>
   </Item>
-  <Item Name="AgfaEcareBruImgHl7TcpOut" Category="A-Agfa,A-Ecare" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaEcareBruImgHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-Ecare" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le DPI" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">BRECAREPROD</Setting>
     <Setting Target="Adapter" Name="Port">21112</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -3132,9 +3137,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaAllImgUrgRouting" Category="A-Ecare,A-Agfa" ClassName="CHUBXL.BP.NEW.AgfaAllImgUrgRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des accusé de réception d&apos;Agfa RIS vers Ecare" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaAllImgUrgRouting" Category="2.URBA-ON,1.MON-ON,A-Ecare,A-Agfa" ClassName="CHUBXL.BP.NEW.AgfaAllImgUrgRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des accusé de réception d&apos;Agfa RIS vers Ecare" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="DiamicAgfaTestV6HudDocHl7FcpOut" Category="A-Diamic,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="DiamicAgfaTestV6HudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Diamic,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des rapport d&apos;anatomie-pathologique (Diamic) vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">DIAMIC</Setting>
@@ -3153,7 +3158,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="EcareHudDocHl7FcpIn" Category="A-Ecare,T-DOC" ClassName="CHUBXL.BS.NEW.EcareHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports des urgences (Ecare)" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareHudDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Ecare,T-DOC" ClassName="CHUBXL.BS.NEW.EcareHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports des urgences (Ecare)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Ecare\archive\Hud</Setting>
@@ -3169,7 +3174,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="EcareBdocHudDocHl7FcpOut" Category="A-Ecare,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareBdocHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Ecare,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Ecare</Setting>
@@ -3190,7 +3195,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Ecare\out\Bdoc\Hud</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Ecare\out\Bdoc\Hud</Setting>
   </Item>
-  <Item Name="EcareAgfaHudDocHl7FcpOut" Category="A-Ecare,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="EcareAgfaHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Ecare,A-Agfa,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat Ecare vers MediWeb HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Ecare</Setting>
@@ -3209,13 +3214,13 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="GlimsBruDocFilesFcpIn" Category="A-Glims,A-NIPT" ClassName="CHUBXL.BS.NEW.GlimsResPdfFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichiers Glims envoyés vers destinataire." LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsBruDocFilesFcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,A-NIPT" ClassName="CHUBXL.BS.NEW.GlimsResPdfFcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Fichiers Glims envoyés vers destinataire." LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="FilePath">g:\PROD\GlimsResExt\in</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.PDF</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\GlimsResExt\archive</Setting>
   </Item>
-  <Item Name="GlimsAllDocFilesFcpOut" Category="A-Glims,A-NIPT" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi résultats Glims vers laboratoires extérieurs." LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllDocFilesFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-NIPT" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi résultats Glims vers laboratoires extérieurs." LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
     <Setting Target="Host" Name="FilePathBLOB"></Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\GlimsResExt\out</Setting>
@@ -3225,7 +3230,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Host" Name="SystemDestination">External Result</Setting>
   </Item>
-  <Item Name="DenAdminBruReqHl7TcpIn" Category="A-DentAdmin,A-Wish" ClassName="CHUBXL.BS.NEW.HL7ADRTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="DenAdminBruReqHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-DentAdmin" ClassName="CHUBXL.BS.NEW.HL7ADRTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AckMode">Immed</Setting>
     <Setting Target="Adapter" Name="Port">21242</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
@@ -3239,7 +3244,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames"></Setting>
     <Setting Target="Adapter" Name="JobPerConnection">1</Setting>
   </Item>
-  <Item Name="DentAdminBruDocHl7FcpIn" Category="A-DentAdmin,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.DentAdminHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de DentAdmin Bru" LogTraceEvents="false" Schedule="">
+  <Item Name="DentAdminBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-DentAdmin,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.DentAdminHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Reception des rapports de DentAdmin Bru" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\DentAdmin\archive\Bru</Setting>
@@ -3255,9 +3260,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="AppendTimestamp">0</Setting>
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
   </Item>
-  <Item Name="DentAdminBruDocRouting" Category="A-DentAdmin" ClassName="CHUBXL.BP.NEW.DentAdminDocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routing message ORU DentAdmin" LogTraceEvents="false" Schedule="">
+  <Item Name="DentAdminBruDocRouting" Category="2.URBA-ON,1.MON-ON,A-DentAdmin" ClassName="CHUBXL.BP.NEW.DentAdminDocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routing message ORU DentAdmin" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="WishDentAdminBruAdtHl7TcpOut" Category="A-Wish,A-DentAdmin" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers DentAdmin" LogTraceEvents="false" Schedule="">
+  <Item Name="WishDentAdminBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-DentAdmin" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers DentAdmin" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\DentAdmin\Bru</Setting>
@@ -3283,7 +3288,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="DentAdminBdocBruDocHl7FcpOut" Category="A-DentAdmin" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi rapports DentAdmin vers Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="DentAdminBdocBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-DentAdmin" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi rapports DentAdmin vers Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
     <Setting Target="Host" Name="FilePathBLOB">\\SPICA\a$\Integrations-Br\Documents\</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\DentAdmin\out\Bdoc\Bru</Setting>
@@ -3293,9 +3298,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemSource">DentAdmin</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="DentAdminDftHl7Routing" Category="A-DentAdmin,A-Wish" ClassName="CHUBXL.BP.NEW.WishDftRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="DentAdminDftHl7Routing" Category="2.URBA-ON,1.MON-ON,A-DentAdmin" ClassName="CHUBXL.BP.NEW.WishDftRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="DentAdminDftBruDlmWsOut" Category="A-DentAdmin,A-Wish" ClassName="CHUBXL.BO.WishDFT.PostFinancialTransactionSoap" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="DentAdminDftBruDlmWsOut" Category="2.URBA-ON,1.MON-ON,A-DentAdmin" ClassName="CHUBXL.BO.WishDFT.PostFinancialTransactionSoap" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
     <Setting Target="Host" Name="RetryInterval">5</Setting>
@@ -3317,7 +3322,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ProxyHttpSSLConnect">0</Setting>
     <Setting Target="Adapter" Name="ProxyHttpTunnel">0</Setting>
   </Item>
-  <Item Name="DenAdminBruDftHl7TcpIn" Category="A-DentAdmin" ClassName="CHUBXL.BS.NEW.HL7DFTTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="DenAdminBruDftHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-DentAdmin" ClassName="CHUBXL.BS.NEW.HL7DFTTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AckMode">App</Setting>
     <Setting Target="Adapter" Name="Port">21272</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
@@ -3331,7 +3336,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">DentAdminDftHl7Routing</Setting>
     <Setting Target="Adapter" Name="JobPerConnection">1</Setting>
   </Item>
-  <Item Name="DentAdminMvAllDocHl7FcpOut" Category="A-DentAdmin,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Rapports DentAdmin vers MV" LogTraceEvents="false" Schedule="">
+  <Item Name="DentAdminMvAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-DentAdmin,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Rapports DentAdmin vers MV" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">DentAdmin</Setting>
@@ -3353,35 +3358,35 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Default</Setting>
     <Setting Target="Adapter" Name="OpenTimeout">5</Setting>
   </Item>
-  <Item Name="BdocHudRetmedHl7FcpIn" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.BdocMedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Retour des médicaments de Bdoc vers Infohos (RDEO11)" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudRetmedHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.BdocMedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Retour des médicaments de Bdoc vers Infohos (RDEO11)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Bdoc\RDE\archive\Hud</Setting>
     <Setting Target="Adapter" Name="FilePath">\\ATAIR\b$\Export\Pharmacy\RDE</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Bdoc\RDE\archive\Hud</Setting>
   </Item>
-  <Item Name="BdocHudConsmedHl7FcpIn" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.BdocMedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Consommation des médicaments de Bdoc vers Infohos (RASO17)" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudConsmedHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.BdocMedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Consommation des médicaments de Bdoc vers Infohos (RASO17)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Bdoc\RAS\archive\Hud</Setting>
     <Setting Target="Adapter" Name="FilePath">\\ATAIR\b$\Export\Pharmacy\RAS</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Bdoc\RAS\archive\Hud</Setting>
   </Item>
-  <Item Name="BdocHudMultidosHl7FcpIn" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.BdocMedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des multi-doses de médicaments de Bdoc vers Infohos (OMSO05)" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudMultidosHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.BdocMedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des multi-doses de médicaments de Bdoc vers Infohos (OMSO05)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Bdoc\OMS\archive\Hud</Setting>
     <Setting Target="Adapter" Name="FilePath">\\ATAIR\b$\Export\Pharmacy\OMS</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Bdoc\OMS\archive\Hud</Setting>
   </Item>
-  <Item Name="BdocHudStomedHl7FcpIn" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.BdocMedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des stocks de médicament de Bdoc vers Infohos Bdoc (MFNM15)" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocHudStomedHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.BdocMedHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des stocks de médicament de Bdoc vers Infohos Bdoc (MFNM15)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Bdoc\MFN15\archive\Hud</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="FilePath">\\ATAIR\b$\Export\Pharmacy\MFN</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Bdoc\MFN15\archive\Hud</Setting>
   </Item>
-  <Item Name="BdocInfohosAllRetmedHl7FcpOut" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Retour des médicaments de Bdoc vers Infohos (RDEO11)" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocInfohosAllRetmedHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Retour des médicaments de Bdoc vers Infohos (RDEO11)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -3397,7 +3402,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemSource">Bdoc</Setting>
     <Setting Target="Host" Name="FilePathLocalHL7">G:\PROD\Bdoc\RDE\out\Infohos\All</Setting>
   </Item>
-  <Item Name="BdocInfohosAllConsmedHl7FcpOut" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Consommation des médicaments de Bdoc vers Infohos (RASO17)" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocInfohosAllConsmedHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Consommation des médicaments de Bdoc vers Infohos (RASO17)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -3413,7 +3418,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination">Infohos</Setting>
     <Setting Target="Host" Name="SystemSource">Bdoc</Setting>
   </Item>
-  <Item Name="BdocInfohosAllMultidosHl7FcpOut" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des multi-doses de médicaments de Bdoc vers Infohos (OMSO05)" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocInfohosAllMultidosHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des multi-doses de médicaments de Bdoc vers Infohos (OMSO05)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -3429,7 +3434,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination">Infohos</Setting>
     <Setting Target="Host" Name="SystemSource">Bdoc</Setting>
   </Item>
-  <Item Name="BdocInfohosAllStomedHl7FcpOut" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des stocks de médicament d&apos;Infohos vers Bdoc (MFNM15)" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocInfohosAllStomedHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des stocks de médicament d&apos;Infohos vers Bdoc (MFNM15)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -3445,16 +3450,16 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination">Infohos</Setting>
     <Setting Target="Host" Name="SystemSource">Bdoc</Setting>
   </Item>
-  <Item Name="BdocAllMedicRouting" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BP.NEW.BdocAllMedicRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des médicaments entre Bdoc et Infohos" LogTraceEvents="false" Schedule="">
+  <Item Name="BdocAllMedicRouting" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BP.NEW.BdocAllMedicRouting" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des médicaments entre Bdoc et Infohos" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="InfohosAllStomedHl7FcpIn" Category="A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des stocks de médicament d&apos;Infohos vers Bdoc (MFNM15)" LogTraceEvents="false" Schedule="">
+  <Item Name="InfohosAllStomedHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Bdoc,A-Infohos" ClassName="CHUBXL.BS.NEW.InfohosHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Gestion des stocks de médicament d&apos;Infohos vers Bdoc (MFNM15)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Infohos\MFN15\archive\All</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Infohos\MFN15\archive\All</Setting>
     <Setting Target="Adapter" Name="FilePath">\\brapo01\D$\ExternalMessaging.Prod\Out\FromApotheekToEveryone\MFNM15</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishOphtalmoBruAdtHl7TcpOut" Category="A-Wish,A-Softalmo,A-Refmed,A-Medecin,T-ADT,T-GDR" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers l&apos;ophtalmologie" LogTraceEvents="false" Schedule="">
+  <Item Name="WishOphtalmoBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Ophtalmo,A-Refmed,A-Medecin,T-ADT,T-GDR" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers l&apos;ophtalmologie" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Ophtalmo\Bru</Setting>
@@ -3480,7 +3485,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="OphtalmoBruDocHl7FcpIn" Category="A-Ophtalmo,T-DOC" ClassName="CHUBXL.BS.NEW.OphtalmoHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports d&apos;Ophtalmologie pour l&apos;HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="OphtalmoBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Ophtalmo,T-DOC" ClassName="CHUBXL.BS.NEW.OphtalmoHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des rapports d&apos;Ophtalmologie pour l&apos;HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Ophtalmo\archive\Bru</Setting>
@@ -3498,7 +3503,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="Extention">PDF</Setting>
     <Setting Target="Adapter" Name="RegistryID"></Setting>
   </Item>
-  <Item Name="OphtalmoBdocBruDocHl7FcpOut" Category="A-Ophtalmo" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi rapports Ophtalmo vers Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="OphtalmoBdocBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Ophtalmo" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi rapports Ophtalmo vers Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
     <Setting Target="Host" Name="FilePathBLOB">\\spica\a$\Integrations-Br\Documents\</Setting>
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Ophtalmo\out\Bdoc\Bru</Setting>
@@ -3508,7 +3513,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemSource">OphtalmoBru</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="CardioBruDocHl7FcpIn" Category="A-Cardio,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.CardioHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports de cardiologie vers Medical Viewer et Bdoc Brugmann/HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="CardioBruDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Cardio,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.CardioHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports de cardiologie vers Medical Viewer et Bdoc Brugmann/HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Cardio\archive\Bru</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Cardio\archive</Setting>
     <Setting Target="Adapter" Name="FileAccessTimeout">10</Setting>
@@ -3516,9 +3521,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="CardioAllDocRouting" Category="A-Cardio,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.CardioHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports de cardiologie vers Medical Viewer et Bdoc Brugmann/HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="CardioAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Cardio,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.CardioHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports de cardiologie vers Medical Viewer et Bdoc Brugmann/HUDERF" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="CardioMvBruDocHl7FcpOut" Category="A-Cardio,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports de cardiologie vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="CardioMvBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Cardio,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports de cardiologie vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Cardio\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Cardio\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathRemoteTXT">\\Sharatan\ACScanImport$\PDF1\Cardio\</Setting>
@@ -3533,7 +3538,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="CardioBdocBruDocHl7FcpOut" Category="A-Cardio,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat cardio vers Bdoc Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="CardioBdocBruDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Cardio,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat cardio vers Bdoc Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Cardio</Setting>
@@ -3555,7 +3560,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Cardio\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
   </Item>
-  <Item Name="CardioBdocHudDocHl7FcpOut" Category="A-Cardio,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat cardio vers Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="CardioBdocHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Cardio,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat cardio vers Bdoc HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Cardio</Setting>
@@ -3577,7 +3582,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Cardio\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
   </Item>
-  <Item Name="OperaInnovianHudRdvHl7TcpOut" Category="A-Innovian,A-Opera,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous Opera H.U.D.E.R.F. vers Innovian" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaInnovianHudRdvHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Innovian,A-Opera,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous Opera H.U.D.E.R.F. vers Innovian" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\OperaRV\out\Innovian\Hud</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">G:\PROD\OperaRV\out\Innovian\Hud</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -3586,7 +3591,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="MonitHudDocHl7FcpIn" Category="A-Monit,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.MonitHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des relevés de monitoring vers Medical Viewer et Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="MonitHudDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Monit,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.MonitHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des relevés de monitoring vers Medical Viewer et Bdoc HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Monitoring\archive</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Monitoring\archive</Setting>
     <Setting Target="Adapter" Name="FileAccessTimeout">10</Setting>
@@ -3595,9 +3600,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
     <Setting Target="Adapter" Name="RegistryID"></Setting>
   </Item>
-  <Item Name="MonitAllDocRouting" Category="A-Monit,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.MonitHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des relevés de monitoring de l&apos;HUDERF vers Medical Viewer et Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="MonitAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Monit,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BP.NEW.MonitHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des relevés de monitoring de l&apos;HUDERF vers Medical Viewer et Bdoc HUDERF" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="MonitBdocHudDocHl7FcpOut" Category="A-Monit,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie relevé monitoring vers Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="MonitBdocHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Monit,A-Bdoc,T-DOC" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie relevé monitoring vers Bdoc HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Monit</Setting>
@@ -3619,7 +3624,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Monitoring\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
   </Item>
-  <Item Name="MonitMvAllDocHl7FcpOut" Category="A-Monit,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des relevés monitoring vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="MonitMvAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Monit,A-Mv,T-DOC" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des relevés monitoring vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Monitoring\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Monitoring\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathRemoteTXT">\\Sharatan\ACScanImport$\PDF1\Monit\</Setting>
@@ -3634,7 +3639,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="OperaAllCheckListHl7FcpIn" Category="A-Opera,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.OperaHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Medical Viewer et Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaAllCheckListHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Opera,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.OperaHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Medical Viewer et Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\OperaCL\archive\All</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\OperaCL\archive\All</Setting>
     <Setting Target="Adapter" Name="FileAccessTimeout">10</Setting>
@@ -3642,9 +3647,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="OperaAllDocRouting" Category="A-Opera,A-Bdoc,A-Mv" ClassName="CHUBXL.BP.NEW.OperaDocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Medical Viewer et Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaAllDocRouting" Category="2.URBA-ON,1.MON-ON,A-Opera,A-Bdoc,A-Mv" ClassName="CHUBXL.BP.NEW.OperaDocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Medical Viewer et Bdoc" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="OperaBdocBruCheckListHl7FcpOut" Category="A-Opera,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Bdoc Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaBdocBruCheckListHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Opera,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Bdoc Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">OperaCL</Setting>
@@ -3666,7 +3671,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\OperaCL\out\Bdoc\Bru</Setting>
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
   </Item>
-  <Item Name="OperaBdocHudCheckListHl7FcpOut" Category="A-Opera,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaBdocHudCheckListHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Opera,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Bdoc HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">OperaCL</Setting>
@@ -3688,7 +3693,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\OperaCL\out\Bdoc\Hud</Setting>
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
   </Item>
-  <Item Name="OperaMvAllCheckListHl7FcpOut" Category="A-OperaCL,A-Mv" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaMvAllCheckListHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-OperaCL,A-Mv" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\OperaCL\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\OperaCL\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathRemoteTXT">\\Sharatan\ACScanImport$\PDF1\Opera\</Setting>
@@ -3703,7 +3708,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishNewInfopartnerAllAdtHl7TcpOut" Category="A-Wish,A-Infopartner,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
+  <Item Name="WishNewInfopartnerAllAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Infopartner,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers Datameal" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\InfopartnerNew\All</Setting>
@@ -3729,7 +3734,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="GlimsInfoPartnerAllDocHl7FcpOut" Category="A-Glims,A-Infopartner" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat laboratoire vers InfoPartner" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsInfoPartnerAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Infopartner" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoie résultat laboratoire vers InfoPartner" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">GLIMS</Setting>
@@ -3748,7 +3753,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathRemoteHL7">\\10.20.8.98\vgrdhl7\HL7_ORU_BRUG\receive</Setting>
     <Setting Target="Host" Name="RPFileHL7">\\10.20.8.98\vgrdhl7\HL7_ORU_BRUG\receive</Setting>
   </Item>
-  <Item Name="OperaNucleusHudRdvHl7TcpOut" Category="A-Innovian,A-Opera,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous Opera H.U.D.E.R.F. vers Nucleus" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaNucleusHudRdvHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Innovian,A-Opera,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous Opera H.U.D.E.R.F. vers Nucleus" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\OperaRV\out\Nucleus\Hud</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">G:\PROD\OperaRV\out\Nucleus\Hud</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -3757,7 +3762,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="OperaAllPlanifHl7FcpIn" Category="A-Opera,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.OperaHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Medical Viewer et Bdoc" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaAllPlanifHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Opera,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.OperaHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des check list Opera vers Medical Viewer et Bdoc" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\OperaPlan\archive</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\OperaPlan\archive</Setting>
     <Setting Target="Adapter" Name="FileAccessTimeout">10</Setting>
@@ -3765,7 +3770,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="OperaNucleusAllPlanifHl7TcpOut" Category="A-Innovian,A-Opera,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous Opera H.U.D.E.R.F. vers Nucleus" LogTraceEvents="false" Schedule="">
+  <Item Name="OperaNucleusAllPlanifHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Innovian,A-Opera,T-RDV" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rendez-vous Opera H.U.D.E.R.F. vers Nucleus" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\OperaPlan\out\Nucleus\All</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">G:\PROD\OperaPlan\out\Nucleus\All</Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -3774,7 +3779,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishPacsOnWebHudAdtHl7TcpOut" Category="A-Wish,T-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers PacsOnWeb HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="WishPacsOnWebHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,T-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers PacsOnWeb HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\PacsOnWeb\Hud</Setting>
@@ -3800,7 +3805,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="AgfaPacsOnWebHudImgHl7TcpOut" Category="A-Agfa,A-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers PacsOnWeb HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaPacsOnWebHudImgHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers PacsOnWeb HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.9.53</Setting>
     <Setting Target="Adapter" Name="Port">21362</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -3810,7 +3815,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaPacsOnWebHudDocHl7TcpOut" Category="A-Agfa,A-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports RIS/QDReport d&apos;Agfa vers PacsOnWeb HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaPacsOnWebHudDocHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports RIS/QDReport d&apos;Agfa vers PacsOnWeb HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.9.53</Setting>
     <Setting Target="Adapter" Name="Port">21372</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -3820,7 +3825,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="WishPacsOnWebBruAdtHl7TcpOut" Category="A-Wish,A-PacOnWeb,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers PacOnWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="WishPacsOnWebBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-PacsOnWeb,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers PacOnWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\PacsOnWeb\Bru</Setting>
@@ -3846,7 +3851,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="AgfaPacsOnWebBruImgHl7TcpOut" Category="A-Agfa,A-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le PacsOnWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaPacsOnWebBruImgHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des références d&apos;imagerie d&apos;Agfa vers le PacsOnWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.9.52</Setting>
     <Setting Target="Adapter" Name="Port">21671</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -3856,7 +3861,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="AgfaPacsOnWebBruDocHl7TcpOut" Category="A-Agfa,A-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Envoi des rapports RIS/QDReport d&apos;Agfa vers PacsOnWeb Brugmann" LogTraceEvents="false" Schedule="">
+  <Item Name="AgfaPacsOnWebBruDocHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Agfa,A-PacsOnWeb" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports RIS/QDReport d&apos;Agfa vers PacsOnWeb Brugmann" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">10.20.9.52</Setting>
     <Setting Target="Adapter" Name="Port">21681</Setting>
     <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
@@ -3866,18 +3871,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="MedecinEnsTestAllMedHl7TcpOut" Category="A-Wish" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Transmission des données médecin vers l&apos;environnement de Test" LogTraceEvents="false" Schedule="">
-    <Setting Target="Adapter" Name="IPAddress">10.20.8.239</Setting>
-    <Setting Target="Adapter" Name="Port">21382</Setting>
-    <Setting Target="Host" Name="FileArchivePath">G:\PROD\Medecin\out\EnsTest\All</Setting>
-    <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Medecin\out\EnsTest\All</Setting>
-    <Setting Target="Adapter" Name="ConnectTimeout">30</Setting>
-    <Setting Target="Adapter" Name="ResponseTimeout">60</Setting>
-    <Setting Target="Host" Name="ReplyCodeActions">:?R=W,:?E=W</Setting>
-    <Setting Target="Host" Name="RetryInterval">60</Setting>
-    <Setting Target="Host" Name="ArchiveIO">0</Setting>
-  </Item>
-  <Item Name="InnovianHudDocHl7FcpIn" Category="A-Innovian,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.InnovianHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Innovian HUDERF vers Medical Viewer et Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="InnovianHudDocHl7FcpIn" Category="2.URBA-ON,1.MON-ON,A-Innovian,A-Bdoc,A-Mv,T-DOC" ClassName="CHUBXL.BS.NEW.InnovianHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Innovian HUDERF vers Medical Viewer et Bdoc HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Innovian\archive\Hud</Setting>
     <Setting Target="Adapter" Name="ArchivePath">G:\PROD\Innovian\archive\Hud</Setting>
     <Setting Target="Adapter" Name="FileAccessTimeout">10</Setting>
@@ -3885,9 +3879,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FileSpec">*.hl7</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InnovianHudDocRouting" Category="A-Innovian,A-Bdoc,A-Mv" ClassName="CHUBXL.BP.NEW.InnovianDocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Innovian HUDERF vers Medical Viewer et Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="InnovianHudDocRouting" Category="2.URBA-ON,1.MON-ON,A-Innovian,A-Bdoc,A-Mv" ClassName="CHUBXL.BP.NEW.InnovianDocHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Innovian HUDERF vers Medical Viewer et Bdoc HUDERF" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="InnovianMvAllDocHl7FcpOut" Category="A-Innovian,A-Mv" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Innovian HUDERF vers Medical Viewer" LogTraceEvents="false" Schedule="">
+  <Item Name="InnovianMvAllDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Innovian,A-Mv" ClassName="CHUBXL.BO.NEW.XmlFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Innovian HUDERF vers Medical Viewer" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FilePathLocalTXT">G:\PROD\Innovian\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Innovian\out\Mv\All</Setting>
     <Setting Target="Host" Name="FilePathRemoteTXT">\\Sharatan\ACScanImport$\PDF1\Innovian\</Setting>
@@ -3902,7 +3896,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RetryInterval">60</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="InnovianBdocHudDocHl7FcpOut" Category="A-Innovian,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Innovian HUDERF vers Bdoc HUDERF" LogTraceEvents="false" Schedule="">
+  <Item Name="InnovianBdocHudDocHl7FcpOut" Category="2.URBA-ON,1.MON-ON,A-Innovian,A-Bdoc" ClassName="CHUBXL.BO.NEW.Hl7okFcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des rapports Innovian HUDERF vers Bdoc HUDERF" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Innovian</Setting>
@@ -3924,7 +3918,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FilePathLocalXML">G:\PROD\Innovian\out\Bdoc\Hud</Setting>
     <Setting Target="Host" Name="ExtentionBLOB">PDF</Setting>
   </Item>
-  <Item Name="WishCigesNewAllAdtDlmTcpOut" Category="A-Wish,A-Ciges,T-ADT" ClassName="CHUBXL.BO.NEW.ParsedTcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des données Administratives vers l&apos;Alpha" LogTraceEvents="false" Schedule="">
+  <Item Name="WishCigesNewAllAdtDlmTcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,A-Ciges,T-ADT" ClassName="CHUBXL.BO.NEW.ParsedTcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Transmission des données Administratives vers l&apos;Alpha" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="SystemSource">Wish</Setting>
@@ -3950,7 +3944,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="WishDiablinkBruAdtHl7TcpOut" Category="A-Wish,T-ADT,A-Diablink" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers le logiciel de diabétologie (Diablink)" LogTraceEvents="false" Schedule="">
+  <Item Name="WishDiablinkBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADT,A-Diablink" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi des données administratives des patients de Wish vers le logiciel de diabétologie (Diablink)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Diablink\Bru</Setting>
@@ -3976,7 +3970,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
   </Item>
-  <Item Name="GlimsAllRsbCsvFcpIn" Category="Glims,Cosite" ClassName="CHUBXL.BS.NEW.GlimsHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims vers le Cosite" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllRsbCsvFcpIn" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Abru,A-Cosite,T-COVID" ClassName="CHUBXL.BS.NEW.GlimsHl7FcpIn" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Fichiers Labo Glims vers le Cosite" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">0</Setting>
     <Setting Target="Host" Name="FileArchivePath"></Setting>
@@ -3993,11 +3987,11 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="CallInterval">5</Setting>
     <Setting Target="Host" Name="DeleteFile">0</Setting>
   </Item>
-  <Item Name="GlimsAllCsvRouting" Category="Glims,Cosite" ClassName="CHUBXL.BP.NEW.GlimsHl7MFURouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Traitement fichiers Glims pour envoi vers le Cosite" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAllCsvRouting" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Abru,A-Cosite,T-COVID" ClassName="CHUBXL.BP.NEW.GlimsHl7MFURouting" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Traitement fichiers Glims pour envoi vers le Cosite" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
   </Item>
-  <Item Name="GlimsAbruBruCovidCsvFcpOut" Category="Glims,Cosite" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi données Brugmann vers Cosite" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAbruBruCovidCsvFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Abru,A-Cosite,T-COVID" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi données Brugmann vers Cosite" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -4013,7 +4007,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination"></Setting>
     <Setting Target="Host" Name="SystemSource"></Setting>
   </Item>
-  <Item Name="GlimsAbruBruCovidCsvWsOut" Category="Glims,Cosite" ClassName="CHUBXL.BO.Cosite.DetailPatient" PoolSize="1" Enabled="true" Foreground="false" Comment="Interrogation du WebService du Cosite Brugmann pour valider le patient Abrumed" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAbruBruCovidCsvWsOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Abru,A-Cosite,T-COVID" ClassName="CHUBXL.BO.Cosite.DetailPatient" PoolSize="1" Enabled="true" Foreground="false" Comment="Interrogation du WebService du Cosite Brugmann pour valider le patient Abrumed" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -4022,7 +4016,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">0</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsAbruHudCovidCsvWsOut" Category="Glims,Cosite" ClassName="CHUBXL.BO.Cosite.DetailPatient" PoolSize="1" Enabled="true" Foreground="false" Comment="Interrogation du WebService du Cosite HUDERF pour valider le patient Abrumed" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAbruHudCovidCsvWsOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Abru,A-Cosite,T-COVID" ClassName="CHUBXL.BO.Cosite.DetailPatient" PoolSize="1" Enabled="true" Foreground="false" Comment="Interrogation du WebService du Cosite HUDERF pour valider le patient Abrumed" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
     <Setting Target="Host" Name="RetryInterval">60</Setting>
@@ -4031,7 +4025,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">0</Setting>
     <Setting Target="Host" Name="ArchiveIO">0</Setting>
   </Item>
-  <Item Name="GlimsAbruHudCovidCsvFcpOut" Category="Glims,Cosite" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi données HUDERF vers Cosite" LogTraceEvents="false" Schedule="">
+  <Item Name="GlimsAbruHudCovidCsvFcpOut" Category="2.URBA-ON,1.MON-ON,A-Glims,A-Abru,A-Cosite,T-COVID" ClassName="CHUBXL.BO.NEW.Hl7FcpOut" PoolSize="1" Enabled="true" Foreground="false" Comment="Envoi données HUDERF vers Cosite" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions"></Setting>
@@ -4047,7 +4041,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SystemDestination"></Setting>
     <Setting Target="Host" Name="SystemSource"></Setting>
   </Item>
-  <Item Name="WishCanexisBruAdtHl7TcpOut" Category="Wish,Admin,Sterili" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Envoi des données signalétique vers l&apos;application de stérilisation de la société Canexis" LogTraceEvents="false" Schedule="">
+  <Item Name="WishCanexisBruAdtHl7TcpOut" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADM,A-Sterili" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="true" Foreground="false" DisableErrorTraps="false" Comment="Envoi des données signalétique vers l&apos;application de stérilisation de la société Canexis" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="InactivityTimeout">0</Setting>
     <Setting Target="Host" Name="AddToMetric">1</Setting>
     <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\Canexis\Bru</Setting>
@@ -4072,6 +4066,12 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="ReadTimeout">5</Setting>
     <Setting Target="Adapter" Name="SSLConfig"></Setting>
     <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\Canexis\Bru</Setting>
+  </Item>
+  <Item Name="WishBrainRtNewHudAdtHl7TcpOut" Category="2.URBA-ON,1.MON-OFF,A-Wish,A-BrainRt,T-ADT" ClassName="CHUBXL.BO.NEW.Hl7TcpOut" PoolSize="1" Enabled="false" Foreground="false" Comment="Adt Wish vers Brainrt (labo sommeil Huderf)" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="IPAddress">brBrainRT</Setting>
+    <Setting Target="Adapter" Name="Port">21011</Setting>
+    <Setting Target="Host" Name="FileArchivePath">G:\PROD\Wish\out\BrainRTNew\Hud</Setting>
+    <Setting Target="Host" Name="FileErrorArchivePath">G:\PROD\Wish\out\BrainRTNew\Hud</Setting>
   </Item>
 </Production>
 }

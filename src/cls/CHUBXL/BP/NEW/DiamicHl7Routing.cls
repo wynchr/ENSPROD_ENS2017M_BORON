@@ -179,6 +179,7 @@ Method OnRequest(pRequest As Ens.Request, Output pResponse As Ens.Response) As %
 			i Instance="ENS2017M" s tSC = ..SendRequestAsync("DiamicBdocBruDocHl7FcpOut",NewMsgDPI)  Quit:$$$ISERR(tSC) tSC
 			i Instance="ENS2017M" s tSC = ..SendRequestAsync("DiamicBdocAllDocHl7FcpOutPrep",NewMsgDPI)  Quit:$$$ISERR(tSC) tSC
 			i Instance="ENS2017PREP" s tSC = ..SendRequestAsync("DiamicBdocBruDocHl7FcpFwd",NewMsgDPI)  Quit:$$$ISERR(tSC) tSC
+			i Instance="ENS2017TEST" s tSC = ..SendRequestAsync("DiamicBdocBruDocHl7FcpOut",NewMsgDPI)  Quit:$$$ISERR(tSC) tSC
 			$$$TRACE("Diamic Msg sent to Bdoc Brugmann")
 		}
 		Else {
@@ -237,6 +238,7 @@ Method OnRequest(pRequest As Ens.Request, Output pResponse As Ens.Response) As %
 			i Instance="ENS2017M" s tSC = ..SendRequestAsync("DiamicBdocHudDocHl7FcpOut",NewMsgDPI1)  Quit:$$$ISERR(tSC) tSC
 			i Instance="ENS2017M" s tSC = ..SendRequestAsync("DiamicBdocAllDocHl7FcpOutPrep",NewMsgDPI1)  Quit:$$$ISERR(tSC) tSC
 			i Instance="ENS2017PREP" s tSC = ..SendRequestAsync("DiamicBdocHudDocHl7FcpFwd",NewMsgDPI1)  Quit:$$$ISERR(tSC) tSC
+			i Instance="ENS2017TEST" s tSC = ..SendRequestAsync("DiamicBdocHudDocHl7FcpOut",NewMsgDPI1)  Quit:$$$ISERR(tSC) tSC
 			$$$TRACE("Diamic Msg sent to Bdoc Huderf")
 		}
 		

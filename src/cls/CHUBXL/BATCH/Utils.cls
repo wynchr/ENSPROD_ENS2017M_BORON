@@ -147,31 +147,93 @@ ALPHA(var,lg) ;
 
 ClassMethod ReadFile() As %Status
 {
-
 	Set tRS=##class(%ResultSet).%New("%Library.File:FileSet"),w="~",NbLg=1
-    Set tSC=tRS.Execute("G:\PROD\AgfaORM\archive\Bru\","*.*"),OldCptLine=0,OldDir=""
-
+    Set tSC=tRS.Execute("G:\PROD\Diamic\archive\All\","Edit6.TXT"),OldCptLine=0,OldDir=""
+	k ^CHUBXL.dulio0,^CHUBXL.dulio1
     While tRS.Next() {
 	    s DirLev1=tRS.Get("Name")
     	w !,DirLev1
+	    Set stream=##class(%FileCharacterStream).%New()
+		Set stream.Filename=DirLev1
+		While 'stream.AtEnd {
+			Set line=stream.ReadLine()
+			s line=$tr(line,$c(9),"~")
+			s ^CHUBXL.dulio1(line)=""
+			;i $e(line,1,3)="OBR" {
+			;	s NumDos=$p($p(line,"|",4),"^",1)
+			;	;'="" w !,"21 - ",$p(line,"|",21)
+			;	s ^CHUBXL.dulio0(NumDos)=""
+			;}
+			;w line,!
+			;s Code=$p(line,w,1),Type=$e($p(line,w,5),1),Lg=$p(line,w,3)
+			;w Code," - ",Type," - ",Lg,!
+			;i $tr($p(line,w,1)," ")'="" s ^CHUBXL.DentAdminWS("PR",NbLg,Code)=Type_w_Lg_w_w_line,NbLg=NbLg+1
+		}
+	}
+	;s x=##class(CHUBXL.BATCH.Utils).ReadFile1()
+	Q $$$OK
+}
 
+ClassMethod CtrlDiamic(Dte) As %Status
+{
+	k ^CHUBXL.dulio0,^CHUBXL.dulio1
+	i $tr(Dte," ")="" s Dte=$tr($zd($h-1,3),"-")
+	w Dte,!
+	s %rsDB = ##class(%Library.ResultSet).%New()
+	s %qDB = ""
+    s %qDB = %qDB_"SELECT NUDDEEXT FROM CHUBXL_DB_DIAMIC.DEMANDE where (to_char(datenreg,'YYYYMMDD')='"_Dte_"' or "
+    s %qDB = %qDB_"to_char(datrepdde,'YYYYMMDD')='"_Dte_"') and nusih=5 order by 1"
+    s status=%rsDB.Prepare(%qDB)
+    s status=%rsDB.Execute()
+    i (status '= 1) {
+		WRITE !,"SELECT failed, status=",status
+		Do DisplayError^%apiOBJ(status) Quit $$$ISERR(status)
+	}
+    While %rsDB.Next() {
+	    s NoDem=%rsDB.Get("NUDDEEXT")
+		s ^CHUBXL.dulio1(NoDem)=""
+	}
+	Set tRS=##class(%ResultSet).%New("%Library.File:FileSet"),w="~",NbLg=1
+    Set tSC=tRS.Execute("G:\PROD\Diamic\archive\All\"_Dte,"*.hl7"),OldCptLine=0,OldDir=""
+    While tRS.Next() {
+	    s DirLev1=tRS.Get("Name")
 	    Set stream=##class(%FileCharacterStream).%New()
 		Set stream.Filename=DirLev1
 		While 'stream.AtEnd {
 			Set line=stream.ReadLine()
 			s line=$tr(line,$c(9),"~")
 			i $e(line,1,3)="OBR" {
-				i $p(line,"|",21)'="" w !,"21 - ",$p(line,"|",21)
-				;i $p(line,"|",22)'="" w !,"21 - ",$p(line,"|",22)
+				s NumDos=$p($p(line,"|",4),"^",1)
+				s ^CHUBXL.dulio0(NumDos)=""
 			}
-			;w line,!
-			;s Code=$p(line,w,1),Type=$e($p(line,w,5),1),Lg=$p(line,w,3)
-			;w Code," - ",Type," - ",Lg,!
-			;i $tr($p(line,w,1)," ")'="" s ^CHUBXL.DentAdminWS("PR",NbLg,Code)=Type_w_Lg_w_w_line,NbLg=NbLg+1
-
 		}
 	}
-	
+	s n=0,t=""
+	s MsgSend="Bonjour Dulio," _$c(13)_$C(10)_$c(13)_$C(10)_"Tu trouveras ci-joint la liste des demandes 'Diamic' "
+	s MsgSend=MsgSend_"qui n'ont pas été envoyées vers 'Bdoc' pour la date du "
+	s MsgSend=MsgSend_$e(Dte,7,8)_"/"_$e(Dte,5,6)_"/"_$e(Dte,1,4)_$c(13)_$C(10)_$c(13)_$C(10)
+	s MsgSend=MsgSend_"Bonne journée"_$c(13)_$C(10)_$c(13)_$C(10)
+	s MsgSend0="Bonjour Dulio," _$c(13)_$C(10)_$c(13)_$C(10)_"Toutes les demandes 'Diamic' "
+	s MsgSend0=MsgSend0_"du "_$e(Dte,7,8)_"/"_$e(Dte,5,6)_"/"_$e(Dte,1,4)
+	s MsgSend0=MsgSend0_" ont bien été envoyées vers 'Bdoc'"_$c(13)_$C(10)_$c(13)_$C(10)
+	s MsgSend0=MsgSend0_"Bonne journée"_$c(13)_$C(10)_$c(13)_$C(10)
+	s MsgSend1=""
+	f  s t=$o(^CHUBXL.dulio1(t)) q:t=""  i '$d(^CHUBXL.dulio0(t)) w !,t s MsgSend1=MsgSend1_t_$c(13)_$C(10)
+		
+	s AllMsgSend=MsgSend0
+	i MsgSend1'="" s AllMsgSend=MsgSend_MsgSend1
+	Set Mailer = ##class(%Net.SMTP).%New()
+	Set Mailer.smtpserver = "smtp.chu-brugmann.be"
+	Set Msg = ##class(%Net.MailMessage).%New()
+	if $p($SYSTEM,":",2) = "ENS2017PREP" Set Msg.From="Ensemble2017Boron01PREP@chu-brugmann.be"
+	if $p($SYSTEM,":",2) = "ENS2017TEST" Set Msg.From="Ensemble2017Boron02TEST@chu-brugmann.be"
+	if $p($SYSTEM,":",2) = "ENS2017M" Set Msg.From="Ensemble2017Boron01PROD@chu-brugmann.be"
+	Do Msg.To.Insert("dulio.ambrogetti@chu-brugmann.be")
+	Set Msg.Subject = "Demande 'Diamic' non envoyées vers 'Bdoc'"
+	Do Msg.TextData.Write(AllMsgSend)
+	set status=Mailer.Send(Msg)
+	if $$$ISERR(status) do $system.OBJ.DisplayError(status) quit
+    
 	Q $$$OK
 }
 

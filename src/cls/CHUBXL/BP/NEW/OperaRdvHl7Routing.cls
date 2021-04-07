@@ -33,10 +33,10 @@ PROCESS
 	OperaAllRdvHl7TcpIn
 		BRUGMANN
 		  		=> AgfaBdocBruRdvHl7TcpOut
-		  		=> AgfaBdocBruRdvHl7TcpFwdPrep
 		HUDERF
 		  		=> AgfaBdocHudRdvHl7TcpOut
-		  		=> ;;;AgfaBdocHudRdvHl7TcpFwd	
+		  		=> OperaInnovianHudRdvHl7TcpOut
+		  		=> OperaNucleusHudRdvHl7TcpOut	
 											
 OPTIMISATION
 ------------
@@ -66,6 +66,7 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 	$$$TRACE("ClassName : "_tClassName)
 	$$$TRACE("SourceConfigName : "_tSourceConfigName)
 	$$$TRACE("TargetConfigName : "_tTargetConfigName)
+	s Instance=$p($SYSTEM,":",2)
 
 	//------------------------------
 	// Test Source
@@ -80,6 +81,9 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 		i pRequest.RawContent=NewMessHL7Out.RawContent s ok=1
 		$$$TRACE("nHop : "_nHop)
 		$$$TRACE("ok : "_ok)
+		$$$TRACE("HL7 MessageType : "_pRequest.GetValueAt("MSH:MessageType.messagetype",,.tSC))
+		s ndosm=pRequest.GetValueAt("PIDgrp(1).PID:PatientIdentifierList(1)",,.tSC)
+		$$$TRACE("Numéro dossier : "_ndosm)
 		s var=""
 		s MSH=pRequest.FindSegmentValues("MSH") i $tr(MSH," ")'="" s var=var_MSH_$c(13) ;s tSC1=NewMessHL7Out.SetValueAt(MSH,"MSH") $$$TRACE(tSC1) 
 		s EVN=pRequest.FindSegmentValues("EVN") i $tr(EVN," ")'="" s var=var_EVN_$c(13) ;s tSC1=NewMessHL7Out.SetValueAt(EVN,"EVN") $$$TRACE(tSC1)
@@ -113,16 +117,25 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 		i pRequest.RawContent=NewMessHL7Out.RawContent s ok=1
 		$$$TRACE("ok : "_ok)
 		i nHop=26 {
-		  s tSC = ..SendRequestAsync("AgfaBdocBruRdvHl7TcpOut",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
-		  ;s tSC = ..SendRequestAsync("AgfaBdocBruRdvHl7TcpFwdPrep",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  i Instance="ENS2017M" {
+		    s tSC = ..SendRequestAsync("AgfaBdocBruRdvHl7TcpOut",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  }
+		  i Instance="ENS2017PREP" {
+		  	s tSC = ..SendRequestAsync("AgfaBdocBruRdvHl7TcpFwd",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  	s tSC = ..SendRequestAsync("AgfaNewBdocBruRdvHl7TcpFwd",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  }
 		}
 		i nHop=27 {
-		  s tSC = ..SendRequestAsync("AgfaBdocHudRdvHl7TcpOut",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
-		  s tSC = ..SendRequestAsync("OperaInnovianHudRdvHl7TcpOut",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
-		  s tSC = ..SendRequestAsync("OperaNucleusHudRdvHl7TcpOut",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
-		  ;s tSC = ..SendRequestAsync("AgfaBdocHudRdvHl7TcpFwd",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  i Instance="ENS2017M" {
+		  	s tSC = ..SendRequestAsync("AgfaBdocHudRdvHl7TcpOut",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  	s tSC = ..SendRequestAsync("OperaInnovianHudRdvHl7TcpOut",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  	s tSC = ..SendRequestAsync("OperaNucleusHudRdvHl7TcpOut",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  }
+		  i Instance="ENS2017PREP" {
+		  	s tSC = ..SendRequestAsync("AgfaBdocHudRdvHl7TcpFwd",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  	s tSC = ..SendRequestAsync("AgfaNewBdocHudRdvHl7TcpFwd",NewMessHL7Out)  Quit:$$$ISERR(tSC) tSC
+		  }
 		}
-		
 		$$$TRACE("Msg sent to DPI")
 	}
 	Else {

@@ -44,6 +44,7 @@ Parameter SETTINGS = "AddToMetric,FileArchivePath";
 Method OnProcessInput(pInput As %RegisteredObject, pOutput As %RegisteredObject) As %Status
 {
 	s tSC=$$$OK	
+	s Instance=$p($SYSTEM,":",2)
 	
 	//------------------------------
 	// Set ArchivePath
@@ -163,15 +164,15 @@ Method OnProcessInput(pInput As %RegisteredObject, pOutput As %RegisteredObject)
 	k HL7File ; Close Object
 		
 	//------------------------------
-	// Archive incoming data	
+	// Send data to ENS2017PREP	
 	//------------------------------
-	
+
 	s Ext="hl7"
 	s From=FileName_"."_Ext
 	s To=..Adapter.ArchivePath_$p(FileName,"\",$l(FileName,"\"))_"."_Ext
 	s To1="G:\PREP\Diamic\in\"_$p(FileName,"\",$l(FileName,"\"))_"."_Ext
-	d ##class(%Library.File).CopyFile(From,To)
-	d ##class(%Library.File).CopyFile(From,To1)
+ 	d ##class(%Library.File).CopyFile(From,To)
+	i Instance="ENS2017M" d ##class(%Library.File).CopyFile(From,To1)
 	d ##class(%Library.File).Delete(From)
 	$$$TRACE("Archive "_Ext_" File To:"_To)
 	
@@ -180,14 +181,16 @@ Method OnProcessInput(pInput As %RegisteredObject, pOutput As %RegisteredObject)
 	s To=..Adapter.ArchivePath_$p(FileName,"\",$l(FileName,"\"))_"."_Ext
 	s To1="G:\PREP\Diamic\in\"_$p(FileName,"\",$l(FileName,"\"))_"."_Ext
 	d ##class(%Library.File).CopyFile(From,To)
-	d ##class(%Library.File).CopyFile(From,To1)
+	i Instance="ENS2017M" d ##class(%Library.File).CopyFile(From,To1)
 	d ##class(%Library.File).Delete(From)
 	$$$TRACE("Archive "_Ext_" File To:"_To)
 	
-	Set file=##class(%File).%New("G:\PREP\Diamic\in\"_$p(FileName,"\",$l(FileName,"\"))_".ok")
-	d file.Open("WSN")
-	d file.WriteLine("")
-	d file.Close()
+	i Instance="ENS2017M" {
+	  Set file=##class(%File).%New("G:\PREP\Diamic\in\"_$p(FileName,"\",$l(FileName,"\"))_".ok")
+	  d file.Open("WSN")
+	  d file.WriteLine("")
+  	  d file.Close()
+	}
 
 	//------------------------------
 	// Trap Routing Error

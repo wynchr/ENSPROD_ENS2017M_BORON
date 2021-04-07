@@ -105,8 +105,8 @@ Method WriteXMLToFile(pRequest As CHUBXL.MSG.ResultMv, Output pResponse As Ens.R
 	. s tf=$tr(tf," "),tf=$tr(tf,"'"),pRequest.TreeFid=tf
 	;. s pRequest.NumeroDemande=$tr($h,",")_$e($tr($j(^CHUBXL.FileSeq(..%ConfigName),7)," ","0"),5,7)
 	. s pRequest.DocUniqueId=pRequest.NumeroDemande
-	s FileName=FileName_tf
-	
+	s FileName=FileName_tf,Extention=..ExtentionBLOB
+	i ..SystemSource="Ophtalmo",pRequest.HospitalFid=27 s Extention="RTF"
 
 	s CRLF=$c(13)_$c(10)
 	s out=""
@@ -178,8 +178,8 @@ Method WriteXMLToFile(pRequest As CHUBXL.MSG.ResultMv, Output pResponse As Ens.R
 	s out=out_"    <BATCH>"_pRequest.Batch_"</BATCH>"_CRLF
 	s out=out_"    <DOC_TEMPLATE>"_pRequest.DocTemplate_"</DOC_TEMPLATE>"_CRLF	
 	s out=out_"    <TREE_FID>"_pRequest.TreeFid_"</TREE_FID>"_CRLF
-	if pRequest.ObservationStatus'="D" s out=out_"    <BLOB>"_..FilePathBLOB_FileName_"."_..ExtentionBLOB_"</BLOB>"_CRLF
-	if pRequest.ObservationStatus="D" s out=out_"    <BLOB>"_$p(..FilePathBLOB,"RTF1",1)_"RTF1_DEL"_$p(..FilePathBLOB,"RTF1",2,99)_FileName_"."_..ExtentionBLOB_"</BLOB>"_CRLF
+	if pRequest.ObservationStatus'="D" s out=out_"    <BLOB>"_..FilePathBLOB_FileName_"."_Extention_"</BLOB>"_CRLF
+	if pRequest.ObservationStatus="D" s out=out_"    <BLOB>"_$p(..FilePathBLOB,"RTF1",1)_"RTF1_DEL"_$p(..FilePathBLOB,"RTF1",2,99)_FileName_"."_Extention_"</BLOB>"_CRLF
 	s out=out_"  </GENERAL_INFO>"_CRLF
 	s out=out_"</GENERAL>"_CRLF
 		
@@ -194,9 +194,9 @@ Method WriteXMLToFile(pRequest As CHUBXL.MSG.ResultMv, Output pResponse As Ens.R
 	if ($l(..FilePathRemoteTXT)>0) {
 		s ..Adapter.FilePath=..FilePathRemoteTXT
 		i pRequest.ObservationStatus="D" s ..Adapter.FilePath=$p(..FilePathRemoteTXT,"RTF1",1)_"RTF1_DEL"_$p(..FilePathRemoteTXT,"RTF1",2,99)
-		$$$TRACE("Send remote TXT msg to "_..FilePathRemoteTXT_FileName_"."_..ExtentionBLOB)
-		s tSC=..Adapter.PutStream(FileName_"."_..ExtentionBLOB,pRequest.Blob)
-		;Quit:('tSC) $$$ERROR($$$GeneralError, "Error writing to file "_..Adapter.FilePath_FileName_"."_..ExtentionBLOB _ $ZError)
+		$$$TRACE("Send remote TXT msg to "_..FilePathRemoteTXT_FileName_"."_Extention)
+		s tSC=..Adapter.PutStream(FileName_"."_Extention,pRequest.Blob)
+		;Quit:('tSC) $$$ERROR($$$GeneralError, "Error writing to file "_..Adapter.FilePath_FileName_"."_Extention _ $ZError)
 		Quit:$$$ISERR(tSC) tSC
 		$$$TRACE("Send remote TXT msg completed")
 	}
@@ -217,8 +217,8 @@ Method WriteXMLToFile(pRequest As CHUBXL.MSG.ResultMv, Output pResponse As Ens.R
 		If '##class(%Library.File).DirectoryExists(dir) Set tSC=##class(%Library.File).CreateDirectory(dir) If 'tSC Quit tSC
 		$$$TRACE("dir:"_dir)
 		s ..Adapter.FilePath=dir
-		$$$TRACE("Send local TXT msg to "_dir_"\"_FileName_"."_..ExtentionBLOB)
-		s tSC=..Adapter.PutStream(FileName_"."_..ExtentionBLOB,pRequest.Blob)
+		$$$TRACE("Send local TXT msg to "_dir_"\"_FileName_"."_Extention)
+		s tSC=..Adapter.PutStream(FileName_"."_Extention,pRequest.Blob)
 		Quit:$$$ISERR(tSC) tSC
 		$$$TRACE("Send local TXT msg completed")
 	}

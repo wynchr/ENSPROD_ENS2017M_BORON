@@ -10,7 +10,8 @@ VERSION
 -------
 CWY	24/07/2018	Initial Version
 CWY	31/07/2018	Add comment
-DAM	01/03/2021	Ajout des interfaces pour PacsOnWeb
+DAM	28/09/2020	Add PacsOnWeb HUDERF
+DAM	10/03/2021	Add PacsOnWeb Brugmann
 
 REQUEST
 -------
@@ -111,8 +112,12 @@ Method OnRequest(pRequest As CHUBXL.DATA.RawMessageStream, Output pResponse As E
 			  s HL7Msg=##class(EnsLib.HL7.Message).ImportFromString(tmp,.tSC)
 		}
 		
-		i (tSourceConfigName = "AgfaHudImgHl7TcpIn" ) {
+		i (tSourceConfigName = "AgfaHudImgHl7TcpIn") {
 		   i Instance="ENS2017M" s tSC = ..SendRequestAsync("AgfaPacsOnWebHudImgHl7TcpOut",HL7Msg)  Quit:$$$ISERR(tSC) tSC
+		}
+
+		i (tSourceConfigName = "AgfaBruImgHl7TcpIn") {
+		   i Instance="ENS2017M" s tSC = ..SendRequestAsync("AgfaPacsOnWebBruImgHl7TcpOut",HL7Msg)  Quit:$$$ISERR(tSC) tSC
 		}
 		
 		s HL7Msg.DocType=HL7Msg.TypeVersion_":"_HL7Msg.Name

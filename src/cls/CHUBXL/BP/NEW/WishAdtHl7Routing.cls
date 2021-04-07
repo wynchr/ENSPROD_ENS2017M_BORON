@@ -16,9 +16,11 @@ DAM	07/08/2019	Mise en commentataire de l'envoie des messages vers Connex.
 DAM	30/04/2019	Ajout connecteur DentAdmin
 DAM	17/06/2019	Ajout connecteur Softalmo HBR
 CWY	10/10/2019	Pour AGFA pas de MOD97 à la demande de LBI
-DAM	28/09/2020	Ajout connecteur PacsOnWeb
+DAM	28/09/2020	Ajout connecteur PacsOnWeb HUDERF
 DAM 04/12/2020	Ajout objet NewMsgHL7iPlan pour ajouter "" au zone numéros de téléphone et date de décès lorsqu'elles sont vides
 DAM	26/02/2021	Ajout test PV1 Astraia.
+DAM	10/03/2020	Ajout connecteur PacsOnWeb Brugmann
+DAM	23/03/2020	Ajout connecteur vers nouveau serveur Brain HUDERF
 
 APPLICATION 	MESSAGE					HOP26	HOP27	A01	A02	A03	A04	A05	A06	A08	A11	A12	A13	A21	A22	A28	A31	A38	A40	A52	A53	DT	FILTER
 ------------	-------					-----	-----	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	------
@@ -26,6 +28,8 @@ Cache			RequestMsgHL7			  x		  x		 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	  x	
 Cache			RequestMsgHL7Ina8		  x		  x		 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	  x	 x	 x	 x	-	-
 Brain			RequestMsgHL7			  -		  x		 x	 x	 x	 -	 -	 -	 x	 x	 x	 x	 -	 -	 -	 -	 -	 x	 -	 -	-	PV1:3="66M"
 Brain			RequestMsgHL7Ina8		  -		  x		 x	 x	 x	 -	 -	 -	 x	 x	 x	 x	 -	 -	 -	 -	 -	 x	 -	 -	-	PV1:3="66M"
+BrainNew		RequestMsgHL7			  -		  x		 x	 x	 x	 -	 -	 -	 x	 x	 x	 x	 -	 -	 -	 -	 -	 x	 -	 -	-	PV1:3="66M"
+BrainNew		RequestMsgHL7Ina8		  -		  x		 x	 x	 x	 -	 -	 -	 x	 x	 x	 x	 -	 -	 -	 -	 -	 x	 -	 -	-	PV1:3="66M"
 
 Astraia  		NewMsgHL7 & NewMsgHL7Ina8 x		  -		 x	 -	 -	 x	 -	 -	 -	 -	 -	 -	 -	 -	 x	 x	 -	 x	 -	 -	-	-
 Datameal		NewMsgHL7 & NewMsgHL7Ina8 x		  -		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x	 x	 x	 x	 -	 x	 x	 x	-	'conv & (TypeSej="I") ! ((PV1="") & (TypeSej'="O"))	& i ((##class(CHUBXL.DT.Utils).CtrlUnite(pRequest.FindSegmentValues("PV1:3.1")))!($tr(pRequest.FindSegmentValues("PV1:3.1")," ")="")) 	
@@ -898,6 +902,8 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 			          i Instance="ENS2017M" {
 				        i '$g(^CHUBXL.Parameter("MedWish","Brain")) s tSC = ..SendRequestAsync("WishBrainRtHudAdtHl7TcpOut",RequestMsgHL7)  Quit:$$$ISERR(tSC) tSC
 				        i $g(^CHUBXL.Parameter("MedWish","Brain")) s tSC = ..SendRequestAsync("WishBrainRtHudAdtHl7TcpOut",RequestMsgHL7Ina8)  Quit:$$$ISERR(tSC) tSC
+				        ;i '$g(^CHUBXL.Parameter("MedWish","BrainNew")) s tSC = ..SendRequestAsync("WishBrainRtNewHudAdtHl7TcpOut",RequestMsgHL7)  Quit:$$$ISERR(tSC) tSC
+				        ;i $g(^CHUBXL.Parameter("MedWish","BrainNew")) s tSC = ..SendRequestAsync("WishBrainRtNewHudAdtHl7TcpOut",RequestMsgHL7Ina8)  Quit:$$$ISERR(tSC) tSC
 			          }
 		            }
 	          }
@@ -956,6 +962,13 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 	          i (MsgType'="A05") & (MsgType'="A38") & (MsgType'="A40") & ('conv) & (Instance="ENS2017M") { 
 	            i '$g(^CHUBXL.Parameter("MedWish","Icip")) s tSC = ..SendRequestAsync("WishIcipHudAdtHl7TcpOut",NewMsgHL7)  Quit:$$$ISERR(tSC) tSC
 	            i $g(^CHUBXL.Parameter("MedWish","Icip")) s tSC = ..SendRequestAsync("WishIcipHudAdtHl7TcpOut",NewMsgHL7Ina8)  Quit:$$$ISERR(tSC) tSC
+	          }
+        }
+        // Send to PacsOnWeb Brugmann  ---------------------------------------------------------------------------------------  
+         i Nhop=26 {
+	          i ((MsgType="A28") ! (MsgType="A31") ! (MsgType="A38") ! (MsgType="A40")) & ('conv) & (Instance="ENS2017M") { 
+	            i '$g(^CHUBXL.Parameter("MedWish","PacsOnWebBru")) s tSC = ..SendRequestAsync("WishPacsOnWebBruAdtHl7TcpOut",NewMsgHL7)  Quit:$$$ISERR(tSC) tSC
+	            i $g(^CHUBXL.Parameter("MedWish","PacsOnWebBru")) s tSC = ..SendRequestAsync("WishPacsOnWebBruAdtHl7TcpOut",NewMsgHL7Ina8)  Quit:$$$ISERR(tSC) tSC
 	          }
         }
         // Send to PacsOnWeb HUDERF  ---------------------------------------------------------------------------------------  
@@ -1274,6 +1287,7 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
         s CodLieuDPI=BdocMsgHL7.FindSegmentValues("PV1:10")
         s NewUniteDPI=##class(CHUBXL.DT.Utils).getMicroMvt(UniteDPI)
         i Instance="ENS2017M" s tSC = ..SendRequestAsync("WishEnsTestAllAdtHl7TcpOut",pRequest)  Quit:$$$ISERR(tSC) tSC
+		i Instance="ENS2017M" s tSC = ..SendRequestAsync("WishEnsTestIR4HAllAdtHl7TcpOut",pRequest)  Quit:$$$ISERR(tSC) tSC		;CWY 06/04/2021 add IR4HTEST	
         i Instance="ENS2017M" s tSC = ..SendRequestAsync("WishEnsPrepAllAdtHl7TcpOut",pRequest)  Quit:$$$ISERR(tSC) tSC
         s tSC1=BdocMsgHL7.SetValueAt(NewUniteDPI,"PV1:AssignedPatientLocation.LocationStatus")
 

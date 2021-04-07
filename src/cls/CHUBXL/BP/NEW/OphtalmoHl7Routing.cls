@@ -34,9 +34,9 @@ PROCESS
 		CHUBXL.DT.ResultOphtalmoToHL7FILE
 		
 		reStatus="F"	
-			CHUBXL.DT.ResultOphtalmoToMv	=> OphtalmoMvHudDocHl7FcpOut	
+			CHUBXL.DT.ResultOphtalmoToMv	=> OphtalmoMvAllDocHl7FcpOut	
 		reStatus2="F" 		
-			CHUBXL.DT.ResultOphtalmoToMv	=> OphtalmoMvHudDocHl7FcpOut								
+			CHUBXL.DT.ResultOphtalmoToMv	=> OphtalmoMvAllDocHl7FcpOut								
 											
 OPTIMISATION
 ------------
@@ -99,7 +99,7 @@ Method OnRequest(pRequest As Ens.Request, Output pResponse As Ens.Response) As %
 			d pRequest.File.Rewind()	
 			s stat = MvMsg.Blob.CopyFrom(pRequest.File)
 			$$$TRACE("pRequest.File : "_pRequest.File)
-			s tSC($G(MvMsg)'="") =..SendRequestAsync("OphtalmoMvHudDocHl7FcpOut",MvMsg)  Quit:$$$ISERR(tSC) tSC		
+			s tSC($G(MvMsg)'="") =..SendRequestAsync("OphtalmoMvAllDocHl7FcpOut",MvMsg)  Quit:$$$ISERR(tSC) tSC		
 			$$$TRACE("Msg sent to Medical Viewer")
 		}
 		
@@ -108,7 +108,7 @@ Method OnRequest(pRequest As Ens.Request, Output pResponse As Ens.Response) As %
 			s tSC=##class(CHUBXL.DT.ResultOphtalmoToMv).Transform(pRequest.HL7,.MvMsg)  Quit:$$$ISERR(tSC) tSC
 			d pRequest.File.Rewind()	
 			s stat = MvMsg.Blob.CopyFrom(pRequest.File)
-			s tSC($G(MvMsg)'="") =..SendRequestAsync("OphtalmoMvHudDocHl7FcpOut",MvMsg)  Quit:$$$ISERR(tSC) tSC		
+			s tSC($G(MvMsg)'="") =..SendRequestAsync("OphtalmoMvAllDocHl7FcpOut",MvMsg)  Quit:$$$ISERR(tSC) tSC		
 			$$$TRACE("Msg sent to Medical Viewer")
 		}
 	}
