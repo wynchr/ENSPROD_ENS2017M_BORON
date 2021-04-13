@@ -82,13 +82,6 @@ Method SendReply(pReplyDocument As EnsLib.EDI.Document, pOriginalDoc As EnsLib.E
 				if ($E(ackCode,2,2)="A") {	; accepted-> send to archive
 					s tSc=pOriginalDoc.OutputToFile(archFileName,0)
 					s:('tSc) tSC= $system.Status.Error(5000,"Cannot archive message in "_archFileName)
-					i ..%ConfigName="WishBruAdtHl7TcpIn" s ^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),0)=$g(^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),0))+1
-					i ..%ConfigName="WishHudAdtHl7TcpIn" s ^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),0)=$g(^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),0))+1
-					i +IdMsg'>+$g(^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),1)) {
-					  s ^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),+IdMsg)=$g(^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),+IdMsg))+1
-					  s ^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),+IdMsg)=^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),+IdMsg)_"~"_$g(ackCode)_"~"_$g(MsgReply)
-					}
-					s ^IRIS.dulio(..%ConfigName,"OK",$zd($h,8),1)=+IdMsg
 				}
 				if (($E(ackCode,2,2)="R") ! ($E(ackCode,2,2)="E")){	; error or rejected !!
 					//$$$TRACE("Archive Error or Rejected Messages !")
@@ -96,8 +89,6 @@ Method SendReply(pReplyDocument As EnsLib.EDI.Document, pOriginalDoc As EnsLib.E
 					s:('tSc) tSC= $system.Status.Error(5000,"Cannot archive message in "_archErrorFileName)
 					s tSc=pReplyDocument.OutputToFile(archErrorFileName,0)
 					s:('tSc) tSC= $system.Status.Error(5000,"Cannot archive error message in "_archErrorFileName)
-					i ..%ConfigName="WishBruAdtHl7TcpIn" s ^IRIS.dulio(..%ConfigName,"NOK",$zd($h,8),0)=$g(^IRIS.dulio(..%ConfigName,"NOK",$zd($h,8),0))+1
-					i ..%ConfigName="WishHudAdtHl7TcpIn" s ^IRIS.dulio(..%ConfigName,"NOK",$zd($h,8),0)=$g(^IRIS.dulio(..%ConfigName,"NOK",$zd($h,8),0))+1
 				}
 			}
 			

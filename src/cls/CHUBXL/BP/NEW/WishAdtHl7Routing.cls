@@ -17,10 +17,13 @@ DAM	30/04/2019	Ajout connecteur DentAdmin
 DAM	17/06/2019	Ajout connecteur Softalmo HBR
 CWY	10/10/2019	Pour AGFA pas de MOD97 à la demande de LBI
 DAM	28/09/2020	Ajout connecteur PacsOnWeb HUDERF
-DAM 04/12/2020	Ajout objet NewMsgHL7iPlan pour ajouter "" au zone numéros de téléphone et date de décès lorsqu'elles sont vides
+DAM	04/12/2020	Ajout objet NewMsgHL7iPlan pour ajouter "" au zone numéros de téléphone et date de décès lorsqu'elles sont vides
 DAM	26/02/2021	Ajout test PV1 Astraia.
-DAM	10/03/2020	Ajout connecteur PacsOnWeb Brugmann
-DAM	23/03/2020	Ajout connecteur vers nouveau serveur Brain HUDERF
+DAM	10/03/2021	Ajout connecteur PacsOnWeb Brugmann
+DAM	23/03/2021	Ajout connecteur vers nouveau serveur Brain HUDERF
+DAM	31/03/2021	Ajout connecteur vers Enterprise Imaging de l'HUDERF
+CWY	06/04/2021	Send to IR4HTEST
+DAM	13/04/2021	Ajout connecteur vers application Canexis (stérilisation)
 
 APPLICATION 	MESSAGE					HOP26	HOP27	A01	A02	A03	A04	A05	A06	A08	A11	A12	A13	A21	A22	A28	A31	A38	A40	A52	A53	DT	FILTER
 ------------	-------					-----	-----	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	---	------
@@ -44,6 +47,7 @@ Ophtalmo Brug	NewMsgHL7 & NewMsgHL7Ina8 -		  x		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x
 Ophtalmo HUDE	NewMsgHL7 & NewMsgHL7Ina8 -		  x		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x	 x	 x	 x	 -	 -	 x	 x	-	'conv	
 
 Agfa			NewMsgHL7 & NewMsgHL7Ina8 x		  x		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x	 x	 x	 x	 -	 x	 x	 x	DT	'conv
+Agfaei			NewMsgHL7 & NewMsgHL7Ina8 x		  x		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x	 x	 x	 x	 -	 x	 x	 x	DT	'conv
 Alpha			NewMsgHL7 & NewMsgHL7Ina8 x		  x		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x	 x	 x	 x	 -	 x	 x	 x	DT	'conv	
 Dialyse			NewMsgHL7 & NewMsgHL7Ina8 x		  x		 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	DT	(TypeSej="I") & (TypeAdm="Z") & (CodeForfait="020")	
 
@@ -59,7 +63,7 @@ Canexis			CanexisMsgHL7			  x		  -		 -	 -   -	 x	 -	 -	 x	 -	 -	 -	 -	 -	 -	 x	 
 PacsOnWeb		NewMsgHL7				  -		  x		 -	 -   -	 -	 -	 -	 -	 -	 -	 -	 -	 -	 x	 x	 x	 x	 -	 -	-	'conv
 Diablink		NewMsgHL7				  x		  -		 x	 x   x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	 x	-	'conv
 iPlan			NewMsgHL7iPlan			  x		  -		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x	 x	 x	 x	 -	 x	 x	 x	DT	'conv
-Canexis			CanexisMsgHL7			  x		  -		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x	 x	 x	 x	 -	 x	 x	 x	DT	'conv
+Canexis			CanexisMsgHL7			  x		  x		 x	 x	 x	 x	 -	 x	 x	 x	 x	 x	 x	 x	 x	 x	 -	 x	 x	 x	DT	'conv
 
 MESSAGES
 --------
@@ -138,10 +142,6 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 	    s CodeForfait	= pRequest.FindSegmentValues("PV1:24")   				; CodeForfait : Code Forfait
 	    s Nadm			= pRequest.FindSegmentValues("PV1:19")					; Numéro d'admission
 	    s CodeServ		= pRequest.FindSegmentValues("PV2:12.4")				; Code service
-
-		s ^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),0)=$g(^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),0))+1
-		i +MsgCtrlId'>+$g(^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),1)) s ^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),+MsgCtrlId)=$g(^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),+MsgCtrlId))+1
-		s ^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),1)=+MsgCtrlId
 
 	    i +$l(Ndosm)<9 s Ndosm=$tr($j(Ndosm,9)," " ,"0")
         
@@ -884,11 +884,17 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 		// Correction du prénom
         i (MsgType'="A05") & (MsgType'="A38") & ('conv) & (NewMsgHL7.FindSegmentValues("PID:5.2")="-") s tSC1=NewMsgHL7.SetValueAt("X","PID:5.2"),tSC1=NewMsgHL7iPlan.SetValueAt("X","PID:5.2"),tSC1=NewMsgHL7Ina8.SetValueAt("X","PID:5.2")
         ;CWY add process for other msg
-	
-
+        
 		//==============================================================================================================================================
 		// ROUTE MESSAGES ==============================================================================================================================
 		//==============================================================================================================================================
+		
+        // Send to IR4HTEST  CWY	06/04/2021---------------------------------------------------------------------------------------          
+		i Instance="IR4HTEST"{
+			s tSC = ..SendRequestAsync("WishIR4HTESTAllAdtHl7FcpOut",pRequest)  Quit:$$$ISERR(tSC) tSC
+			Quit tSC	
+		}
+
         // Send to Cache ---------------------------------------------------------------------------------------
         i Instance="ENS2017M" {
 	      i '$g(^CHUBXL.Parameter("MedWish","Cache")) s tSC = ..SendRequestAsync("WishCacheAllAdtHl7FcpOut",RequestMsgHL7)  Quit:$$$ISERR(tSC) tSC
@@ -933,8 +939,6 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 		      i $g(^CHUBXL.Parameter("MedWish","Astraia")) s tSC = ..SendRequestAsync("WishAstraiaBruAdtHl7TcpOut",NewMsgHL7Ina8)  Quit:$$$ISERR(tSC) tSC
 	        }
 	        i Instance="ENS2017TEST" {
-		      i '$g(^CHUBXL.Parameter("MedWish","Astraia")) s:(MsgType="A28")!(MsgType="A31")!(MsgType="A40")!(MsgType="A01")!(MsgType="A04") tSC = ..SendRequestAsync("WishAstraiaBruAdtHl7TcpOut",NewMsgHL7)  Quit:$$$ISERR(tSC) tSC
-		      i $g(^CHUBXL.Parameter("MedWish","Astraia")) s:(MsgType="A28")!(MsgType="A31")!(MsgType="A40")!(MsgType="A01")!(MsgType="A04") tSC = ..SendRequestAsync("WishAstraiaBruAdtHl7TcpOut",NewMsgHL7Ina8)  Quit:$$$ISERR(tSC) tSC
 		      i '$g(^CHUBXL.Parameter("MedWish","Astraia")) s:((Ndosm=200500086)!(Ndosm=200520631)!(Ndosm=200561445))&(CodeLieuOk) tSC = ..SendRequestAsync("WishNewAstraiaBruAdtHl7TcpOut",NewMsgHL7)  Quit:$$$ISERR(tSC) tSC
 		      i $g(^CHUBXL.Parameter("MedWish","Astraia")) s:((Ndosm=200500086)!(Ndosm=200520631)!(Ndosm=200561445))&(CodeLieuOk) tSC = ..SendRequestAsync("WishNewAstraiaBruAdtHl7TcpOut",NewMsgHL7Ina8)  Quit:$$$ISERR(tSC) tSC
 	          i '$g(^CHUBXL.Parameter("MedWish","Astraia")) ;s tSC = ..SendRequestAsync("WishAstraiaBruAdtHl7TcpFwd",NewMsgHL7)  Quit:$$$ISERR(tSC) tSC
@@ -1125,6 +1129,19 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 			              ;i Instance="ENS2017M" s tSC = ..SendRequestAsync("WishAgfaTestV6HudAdtHl7TcpOut",RDVtoAgfa)  Quit:$$$ISERR(tSC) tSC
 		            }
 	          }
+	          i (MsgType="A28") & ('conv) {
+		            i Instance="ENS2017TEST" {
+			          s tSC=##class(CHUBXL.DT.WishToAgfaeiHud).Transform(pRequest,.oWishAgfaeiOut) Quit:$$$ISERR(tSC) tSC
+			          s tSC = ..SendRequestAsync("WishAgfaeiHudAdtHl7TcpOut",oWishAgfaeiOut)  Quit:$$$ISERR(tSC) tSC
+		            }
+	          }
+	          i (MsgType'="A05") & (MsgType'="A38") & (MsgType'="A28") & ('conv) {
+		            i Instance="ENS2017TEST" {
+			          s tSC=##class(CHUBXL.DT.WishToAgfaeiHud).Transform(pRequest,.oWishAgfaeiOut) Quit:$$$ISERR(tSC) tSC
+			          i '$g(^CHUBXL.Parameter("MedWish","Agfaei")) s tSC = ..SendRequestAsync("WishAgfaeiHudAdtHl7TcpOut",oWishAgfaeiOut)  Quit:$$$ISERR(tSC) tSC
+			          i $g(^CHUBXL.Parameter("MedWish","Agfaei")) s tSC = ..SendRequestAsync("WishAgfaeiHudAdtHl7TcpOut",oWishAgfaeiOut)  Quit:$$$ISERR(tSC) tSC
+		            }
+	          }
         }
         // Send to Alpha ---------------------------------------------------------------------------------------
         i (MsgType'="A05") & (MsgType'="A38") & (MsgType'="A40") & ('conv) {
@@ -1201,11 +1218,7 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
         }
         
         // Send to Canexis/Stérilisation  ---------------------------------------------------------------------------------------            
-        i Nhop=26 {
-              ;CWYi (MsgType'="A05") & (MsgType'="A38") & ('conv) & (Ndosm=201063264) s:(Instance="ENS2017TEST") tSC = ..SendRequestAsync("WishCanexisBruAdtHl7TcpOut",CanexisMsgHL7)  Quit:$$$ISERR(tSC) tSC
-              ;i (MsgType'="A05") & (MsgType'="A38") & ('conv) s:(Instance="ENS2017TEST") tSC = ..SendRequestAsync("WishCanexisBruAdtHl7TcpOut",CanexisMsgHL7)  Quit:$$$ISERR(tSC) tSC
-              i (MsgType'="A05") & (MsgType'="A38") & ('conv) s:(Instance'="ENS2017PREP") tSC = ..SendRequestAsync("WishCanexisBruAdtHl7TcpOut",CanexisMsgHL7)  Quit:$$$ISERR(tSC) tSC
-        }
+        i (MsgType'="A05") & (MsgType'="A38") & ('conv) s:(Instance'="ENS2017PREP") tSC = ..SendRequestAsync("WishCanexisBruAdtHl7TcpOut",CanexisMsgHL7)  Quit:$$$ISERR(tSC) tSC
         
         // Send to DentAdmin ---------------------------------------------------------------------------------------
         i (Nhop=26) {
@@ -1312,8 +1325,9 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 		        s tSC = ..SendRequestAsync("WishBdocprepHudAdtHl7TcpOut",BdocMsgHL7)  Quit:$$$ISERR(tSC) tSC
 		        s tSC = ..SendRequestAsync("WishBdocNewprepHudAdtHl7TcpOut",BdocMsgHL7)  Quit:$$$ISERR(tSC) tSC
 	          }
-	          i Instance="ENS2017TEST" ;s tSC = ..SendRequestAsync("WishBdoctestHudAdtHl7TcpOut",BdocMsgHL7)  Quit:$$$ISERR(tSC) tSC
+	          i Instance="ENS2017TEST" s tSC = ..SendRequestAsync("WishBdoctestHudAdtHl7TcpOut",BdocMsgHL7)  Quit:$$$ISERR(tSC) tSC
         }
+        
         // Send mail when merging ---------------------------------------------------------------------------------------
         i MsgType="A40" {
 	          d ..SendEmail("Astraia",pRequest.RawContent,$p($g(MRG),"|",2),pRequest.FindSegmentValues("PID:3"))

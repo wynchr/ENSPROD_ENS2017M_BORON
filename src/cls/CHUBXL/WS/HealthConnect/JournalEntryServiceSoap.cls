@@ -2,7 +2,7 @@ Class CHUBXL.WS.HealthConnect.JournalEntryServiceSoap Extends %SOAP.WebClient [ 
 {
 
 /// This is the URL used to access the web service.
-Parameter LOCATION = "http://10.20.9.157:8080/timestamping/services/JournalEntryService/";
+Parameter LOCATION = "http://10.20.8.156:8080/timestamping/services/JournalEntryService/";
 
 /// This is the namespace used by the Service
 Parameter NAMESPACE = "http://schemas.healthconnect.be/timestamping/1_0/";

@@ -453,7 +453,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp.chu-brugmann.be</Setting>
   </Item>
-  <Item Name="WishAllAdtRouting" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADT" ClassName="CHUBXL.BP.NEW.WishAdtHl7Routing" PoolSize="1" Enabled="true" Foreground="true" Comment="Routing des messsages de données administratives des patients (Wish)" LogTraceEvents="true" Schedule="">
+  <Item Name="WishAllAdtRouting" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADT" ClassName="CHUBXL.BP.NEW.WishAdtHl7Routing" PoolSize="1" Enabled="true" Foreground="false" Comment="Routing des messsages de données administratives des patients (Wish)" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AddToMetric">1</Setting>
   </Item>
   <Item Name="WishBruAdtHl7TcpIn" Category="2.URBA-ON,1.MON-ON,A-Wish,T-ADT" ClassName="CHUBXL.BS.NEW.Hl7MllpTcpIn" PoolSize="1" Enabled="true" Foreground="false" Comment="Reception des messages de données administratives des patients Brugmann." LogTraceEvents="false" Schedule="">

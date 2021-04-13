@@ -111,10 +111,6 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 	    s CodeForfait	= pRequest.FindSegmentValues("PV1:24")   				; CodeForfait : Code Forfait
 	    s Nadm			= pRequest.FindSegmentValues("PV1:19")					; Numéro d'admission
 
-		s ^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),0)=$g(^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),0))+1
-		i +MsgCtrlId'>+$g(^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),1)) s ^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),+MsgCtrlId)=$g(^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),+MsgCtrlId))+1
-		s ^IRIS.dulio(tSourceConfigName,"BP",$zd($h,8),1)=+MsgCtrlId
-
 	    i +$l(Ndosm)<9 s Ndosm=$tr($j(Ndosm,9)," " ,"0")
         
         s conv=0,convdia=0,convoxy=0,convinfohos=0

@@ -237,4 +237,39 @@ ClassMethod CtrlDiamic(Dte) As %Status
 	Q $$$OK
 }
 
+ClassMethod XStat(ID) As %Status
+{
+	set rs=##class(%Library.ResultSet).%New()
+	set SQL="SELECT R.ID , Xml FROM CHUBXL_DB_XSTATBR.SpecNote R WHERE ID = '"_ID_"'"
+	Set st=rs.Prepare(SQL)
+	
+	Do rs.Execute()
+	
+	s i=0	
+	while (rs.Next() '= 0) {
+		s out=""
+		s out=out_"ID : "_$get(rs.Data("ID"))_$c(13)_$c(10)
+		s out=out_"XML : "_$get(rs.Data("Xml"))
+		s out=out_" "_$get(rs.Data("Xml")).Size_" length"
+		w out,!
+		
+		s pID=$get(rs.Data("ID")),Xml=$get(rs.Data("Xml"))
+		w "--- Start of Text ---",!
+		;While ('Xml.AtEnd) {
+		;Set line=Xml.ReadLine()
+		;if line '= "" {
+			;w line,!
+		;}
+		;}
+		s Message=Xml.Read()
+		w "Mesage : ",Message,!,"Longueur : ",$l(Message),!
+		w "--- End of Text ---",!
+		
+	}
+	
+	Do rs.Close()
+	Kill rs
+	Q $$$OK
+}
+
 }
